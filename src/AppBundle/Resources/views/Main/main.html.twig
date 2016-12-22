@@ -5,7 +5,7 @@
 {% block body %}
     {% if teams %}
         {% for team in teams %}
-            <h3>{{ team.full_name }}</h3><em> ({{ team.abbreviation }})</em>
+            <p><strong>{{ team.full_name }}</strong><em> ({{ team.abbreviation }})</em></p>
         {% endfor %}
     {% endif %}
 {% endblock %}

@@ -28,19 +28,19 @@ class TeamsSaver
         $divisionRepository = $this->doctrineRegistry->getRepository('AppBundle:Division');
 
         foreach ($teams as $team) {
-            if (empty($divisionRepository->findBy(['name' => $team['division']]))) {
+            if (null === $divisionRepository->findOneBy(['name' => $team['division']])) {
                 $newDivision = new Division();
                 $newDivision->setName($team['division']);
                 $em->persist($newDivision);
             }
-            if (empty($conferenceRepository->findBy(['name' => $team['conference']]))) {
+            if (null === $conferenceRepository->findOneBy(['name' => $team['conference']])) {
                 $newConference = new Conference();
                 $newConference->setName($team['conference']);
                 $em->persist($newConference);
             }
             $em->flush();
 
-            if (empty($teamRepository->findBy(['short' => $team['abbreviation']]))) {
+            if (null === $teamRepository->findOneBy(['short' => $team['abbreviation']])) {
                 $newTeam = new Team();
                 $newTeam->setShort($team['abbreviation']);
                 $newTeam->setFirstName($team['first_name']);
@@ -49,14 +49,14 @@ class TeamsSaver
                 $newTeam->setState($team['state']);
                 $newTeam->setSiteName($team['site_name']);
 
-                $division = $divisionRepository->findBy(['name' => $team['division']]);
-                $conference = $conferenceRepository->findBy(['name' => $team['conference']]);
+                $division = $divisionRepository->findOneBy(['name' => $team['division']]);
+                $conference = $conferenceRepository->findOneBy(['name' => $team['conference']]);
 
-                if (!empty($division)) {
-                    $newTeam->setDivision($division[0]);
+                if ($division) {
+                    $newTeam->setDivision($division);
                 }
-                if (!empty($conference)) {
-                    $newTeam->setConference($conference[0]);
+                if ($conference) {
+                    $newTeam->setConference($conference);
                 }
 
                 $em->persist($newTeam);

@@ -16,12 +16,5 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-        $doctrine = $this->getDoctrine();
-        $teamsData = new TeamsDataImporter();
-        $saver = new TeamsSaver($doctrine);
-        $teams = $teamsData->getTeams();
-        $saver->saveTeams($teams);
-
-        return ['teams' => $teams];
     }
 }
