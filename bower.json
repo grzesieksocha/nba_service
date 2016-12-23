@@ -1,0 +1,20 @@
+{
+  "name": "nba_service",
+  "homepage": "https://github.com/grzesieksocha/nba_service",
+  "authors": [
+    "grzesieksocha <grzesiek.soch@gmail.com>"
+  ],
+  "description": "NBA Play-Off Game",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

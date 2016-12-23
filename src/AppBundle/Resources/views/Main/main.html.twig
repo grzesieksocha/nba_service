@@ -1,11 +1,6 @@
 {% extends '@App/base.html.twig' %}
 
-{% block title %} NBA Teams {% endblock %}
+{% block title %}NBA Play-Off{% endblock %}
 
 {% block body %}
-    {% if teams %}
-        {% for team in teams %}
-            <p><strong>{{ team.full_name }}</strong><em> ({{ team.abbreviation }})</em></p>
-        {% endfor %}
-    {% endif %}
 {% endblock %}
