@@ -2,14 +2,14 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use \DateTime;
 
 /**
- * League
- *
- * @ORM\Table(name="league")
+ * @ORM\Entity()
+ * @ORM\Table(name="leagues")
  */
 class League
 {
@@ -30,11 +30,11 @@ class League
     private $name;
 
     /**
-     * @var int
+     * Many Leagues have Many Users
      *
-     * @ORM\Column(name="type", type="smallint")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="leagues")
      */
-    private $type;
+    private $users;
 
     /**
      * @ORM\Column(name="last_change_on", type="datetime")
@@ -47,9 +47,12 @@ class League
     private $itemStatus;
 
 
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -57,52 +60,30 @@ class League
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return League
-     */
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
-     * Get name
-     *
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    public function addUser($user)
+    {
+        $this->users->add($user);
+    }
+
+    /**
      * @return string
      */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set type
-     *
-     * @param integer $type
-     *
-     * @return League
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return int
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     public function getLastChangeOn()

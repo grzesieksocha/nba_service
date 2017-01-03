@@ -66,9 +66,9 @@ class Conference
         return $this->teams;
     }
 
-    public function setTeams($teams)
+    public function addTeam($team)
     {
-        $this->teams = $teams;
+        $this->teams->add($team);
     }
 
     public function getLastChangeOn()

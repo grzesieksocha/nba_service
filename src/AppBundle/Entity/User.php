@@ -2,12 +2,14 @@
 
 namespace AppBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="fos_user")
+ * @ORM\Table(name="users")
  */
 class User extends BaseUser
 {
@@ -18,9 +20,17 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * Many Users have Many Leagues
+     *
+     * @ORM\ManyToMany(targetEntity="League", inversedBy="users")
+     * @ORM\JoinTable(name="users_leagues")
+     */
+    protected $leagues;
+
     public function __construct()
     {
+        $this->leagues = new ArrayCollection();
         parent::__construct();
-        // your own logic
     }
 }

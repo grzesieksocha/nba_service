@@ -2,9 +2,10 @@
 
 namespace AppBundle\Entity;
 
-use \DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+
+use \DateTime;
 
 /**
  * @ORM\Entity()
@@ -65,9 +66,9 @@ class Division
         return $this->teams;
     }
 
-    public function setTeams($teams)
+    public function addTeam($team)
     {
-        $this->teams = $teams;
+        $this->teams->add($team);
     }
 
     public function getLastChangeOn()
