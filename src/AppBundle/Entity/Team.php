@@ -65,6 +65,11 @@ class Team
     private $lastChangeOn;
 
     /**
+     * @ORM\Column(name = "item_status", type = "boolean", options = {"default" = 1})
+     */
+    private $itemStatus;
+
+    /**
      * @return int
      */
     public function getId()
@@ -163,6 +168,16 @@ class Team
     public function setState($state)
     {
         $this->state = $state;
+    }
+
+    public function getItemStatus()
+    {
+        return $this->itemStatus;
+    }
+
+    public function setItemStatus($itemStatus)
+    {
+        $this->itemStatus = $itemStatus;
     }
 
     /**

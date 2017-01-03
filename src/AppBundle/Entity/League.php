@@ -2,33 +2,39 @@
 
 namespace AppBundle\Entity;
 
-use \DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use \DateTime;
+
 /**
- * @ORM\Entity()
- * @ORM\Table(name="divisions")
- * @ORM\HasLifecycleCallbacks()
+ * League
+ *
+ * @ORM\Table(name="league")
  */
-class Division
+class League
 {
     /**
-     * @ORM\Id
+     * @var int
+     *
      * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(name="name", type="string", length=64)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Team", mappedBy="division")
+     * @var int
+     *
+     * @ORM\Column(name="type", type="smallint")
      */
-    private $teams;
+    private $type;
 
     /**
      * @ORM\Column(name="last_change_on", type="datetime")
@@ -40,34 +46,63 @@ class Division
      */
     private $itemStatus;
 
-    public function __construct()
-    {
-        $this->teams = new ArrayCollection();
-    }
 
+    /**
+     * Get id
+     *
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return League
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
-    public function setName($name)
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return League
+     */
+    public function setType($type)
     {
-        $this->name = $name;
+        $this->type = $type;
+
+        return $this;
     }
 
-    public function getTeams()
+    /**
+     * Get type
+     *
+     * @return int
+     */
+    public function getType()
     {
-        return $this->teams;
-    }
-
-    public function setTeams($teams)
-    {
-        $this->teams = $teams;
+        return $this->type;
     }
 
     public function getLastChangeOn()
@@ -99,3 +134,4 @@ class Division
         $this->setLastChangeOn(new DateTime(date('Y-m-d H:i:s')));
     }
 }
+
