@@ -14,6 +14,9 @@ use \DateTime;
  */
 class Division
 {
+    const V_ITEM_STATUS_ACTIVE = 1;
+    const V_ITEM_STATUS_DISABLED = 0;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")

@@ -13,6 +13,9 @@ use \DateTime;
  */
 class League
 {
+    const V_ITEM_STATUS_ACTIVE = 1;
+    const V_ITEM_STATUS_DISABLED = 0;
+
     /**
      * @var int
      *
