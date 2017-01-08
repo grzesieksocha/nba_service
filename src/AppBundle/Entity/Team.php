@@ -8,13 +8,13 @@ use \DateTime;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="teams")
+ * @ORM\Table(name="team")
  * @ORM\HasLifecycleCallbacks()
  */
 class Team
 {
-    const V_ITEM_STATUS_ACTIVE = 1;
-    const V_ITEM_STATUS_DISABLED = 0;
+    const V_ACTIVE = 1;
+    const V_DISABLED = 0;
 
     /**
      * @ORM\Id
@@ -69,9 +69,9 @@ class Team
     private $lastChangeOn;
 
     /**
-     * @ORM\Column(name = "item_status", type = "boolean", options = {"default" = 1})
+     * @ORM\Column(name = "is_active", type = "boolean")
      */
-    private $itemStatus;
+    private $isActive;
 
     /**
      * @return int
@@ -174,14 +174,23 @@ class Team
         $this->state = $state;
     }
 
-    public function getItemStatus()
+    /**
+     * @return bool
+     */
+    public function getIsActive()
     {
-        return $this->itemStatus;
+        return $this->isActive;
     }
 
-    public function setItemStatus($itemStatus)
+    /**
+     * @param bool $isActive
+     *
+     * @return Team
+     */
+    public function setIsActive(bool $isActive)
     {
-        $this->itemStatus = $itemStatus;
+        $this->isActive = $isActive;
+        return $this;
     }
 
     /**

@@ -9,13 +9,13 @@ use \DateTime;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name = "conferences")
+ * @ORM\Table(name = "conference")
  * @ORM\HasLifecycleCallbacks()
  */
 class Conference
 {
-    const V_ITEM_STATUS_ACTIVE = 1;
-    const V_ITEM_STATUS_DISABLED = 0;
+    const V_ACTIVE = true;
+    const V_DISABLED = false;
 
     /**
      * @ORM\Id
@@ -40,9 +40,9 @@ class Conference
     private $lastChangeOn;
 
     /**
-     * @ORM\Column(name = "item_status", type = "boolean", options = {"default" = 1})
+     * @ORM\Column(name = "is_active", type = "boolean")
      */
-    private $itemStatus;
+    private $isActive;
 
     public function __construct()
     {
@@ -84,14 +84,23 @@ class Conference
         $this->lastChangeOn = $lastChangeOn;
     }
 
-    public function getItemStatus()
+    /**
+     * @return bool
+     */
+    public function getIsActive()
     {
-        return $this->itemStatus;
+        return $this->isActive;
     }
 
-    public function setItemStatus($itemStatus)
+    /**
+     * @param bool $isActive
+     *
+     * @return Conference
+     */
+    public function setIsActive(bool $isActive)
     {
-        $this->itemStatus = $itemStatus;
+        $this->isActive = $isActive;
+        return $this;
     }
 
     /**

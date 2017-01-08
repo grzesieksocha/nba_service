@@ -1,12 +1,11 @@
 <?php
 
-
 namespace AppBundle\DataImporter;
-
 
 use AppBundle\Entity\Conference;
 use AppBundle\Entity\Division;
 use AppBundle\Entity\Team;
+
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 
@@ -31,13 +30,13 @@ class TeamsSaver
             if (null === $divisionRepository->findOneBy(['name' => $team['division']])) {
                 $newDivision = new Division();
                 $newDivision->setName($team['division']);
-                $newDivision->setItemStatus(Division::V_ITEM_STATUS_ACTIVE);
+                $newDivision->setIsActive(Division::V_ACTIVE);
                 $em->persist($newDivision);
             }
             if (null === $conferenceRepository->findOneBy(['name' => $team['conference']])) {
                 $newConference = new Conference();
                 $newConference->setName($team['conference']);
-                $newConference->setItemStatus(Conference::V_ITEM_STATUS_ACTIVE);
+                $newConference->setIsActive(Conference::V_ACTIVE);
                 $em->persist($newConference);
             }
             $em->flush();
@@ -50,7 +49,7 @@ class TeamsSaver
                 $newTeam->setCity($team['city']);
                 $newTeam->setState($team['state']);
                 $newTeam->setSiteName($team['site_name']);
-                $newTeam->setItemStatus(Team::V_ITEM_STATUS_ACTIVE);
+                $newTeam->setIsActive(Team::V_ACTIVE);
 
                 $division = $divisionRepository->findOneBy(['name' => $team['division']]);
                 $conference = $conferenceRepository->findOneBy(['name' => $team['conference']]);

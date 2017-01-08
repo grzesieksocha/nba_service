@@ -1,0 +1,12 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}NBA Play-Off{% endblock %}
+
+{% block body %}
+    <h3>
+        {{ league.name }}
+        {% if league.isPrivate %}
+            (private)
+        {% endif %}
+    </h3>
+{% endblock %}

@@ -9,13 +9,13 @@ use \DateTime;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="divisions")
+ * @ORM\Table(name="division")
  * @ORM\HasLifecycleCallbacks()
  */
 class Division
 {
-    const V_ITEM_STATUS_ACTIVE = 1;
-    const V_ITEM_STATUS_DISABLED = 0;
+    const V_ACTIVE = 1;
+    const V_DISABLED = 0;
 
     /**
      * @ORM\Id
@@ -40,9 +40,9 @@ class Division
     private $lastChangeOn;
 
     /**
-     * @ORM\Column(name = "item_status", type = "boolean", options = {"default" = 1})
+     * @ORM\Column(name = "is_active", type = "boolean")
      */
-    private $itemStatus;
+    private $isActive;
 
     public function __construct()
     {
@@ -84,14 +84,23 @@ class Division
         $this->lastChangeOn = $lastChangeOn;
     }
 
-    public function getItemStatus()
+    /**
+     * @return bool
+     */
+    public function getIsActive()
     {
-        return $this->itemStatus;
+        return $this->isActive;
     }
 
-    public function setItemStatus($itemStatus)
+    /**
+     * @param bool $isActive
+     *
+     * @return Division
+     */
+    public function setIsActive(bool $isActive)
     {
-        $this->itemStatus = $itemStatus;
+        $this->isActive = $isActive;
+        return $this;
     }
 
     /**

@@ -1,0 +1,16 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}NBA Play-Off{% endblock %}
+
+{% block body %}
+    {% if leagues %}
+        <h3>Your leagues:</h3>
+        <ol>
+        {% for league in leagues %}
+            <li><a href="{{ path('league_show', {'leagueId': league.id}) }}">{{ league.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% else %}
+        You do not have any leagues!
+    {% endif %}
+{% endblock %}
