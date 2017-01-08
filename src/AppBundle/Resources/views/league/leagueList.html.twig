@@ -7,7 +7,7 @@
         <h3>Your leagues:</h3>
         <ol>
         {% for league in leagues %}
-            <li><a href="{{ path('league_show', {'leagueId': league.id}) }}">{{ league.name }}</a></li>
+            <li><a href="{{ path('league_show', {'id': league.id}) }}">{{ league.name }}</a></li>
         {% endfor %}
         </ol>
     {% else %}
