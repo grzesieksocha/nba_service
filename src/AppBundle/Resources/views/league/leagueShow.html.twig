@@ -9,4 +9,14 @@
             (private)
         {% endif %}
     </h3>
+    <strong>Players:</strong>
+    {% if players %}
+        <ol>
+            {% for player in players %}
+                <li>{{ player.username|capitalize }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        No active players yet!
+    {% endif %}
 {% endblock %}

@@ -42,7 +42,12 @@ class LeagueController extends Controller
      */
     public function showAction(League $league)
     {
-        return ['league' => $league];
+        $players = $league->getUsers();
+
+        return [
+            'league' => $league,
+            'players' => $players
+        ];
     }
 
     /**
