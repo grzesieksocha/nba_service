@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 class LeagueController extends Controller
 {
     /**
-     * @Route("/", name="league_list")
+     * @Route("/list", name="league_list")
      * @Template("@App/league/leagueList.html.twig")
      */
     public function listAction()
@@ -30,24 +30,6 @@ class LeagueController extends Controller
             ->getLeaguesForUser($this->getUser());
 
         return ['leagues' => $leagues];
-    }
-
-    /**
-     * @Route("/{id}", name="league_show")
-     * @Template("@App/league/leagueShow.html.twig")
-     *
-     * @param League $league
-     *
-     * @return array
-     */
-    public function showAction(League $league)
-    {
-        $players = $league->getUsers();
-
-        return [
-            'league' => $league,
-            'players' => $players
-        ];
     }
 
     /**
@@ -82,5 +64,23 @@ class LeagueController extends Controller
         }
 
         return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Route("/{id}", name="league_show")
+     * @Template("@App/league/leagueShow.html.twig")
+     *
+     * @param League $league
+     *
+     * @return array
+     */
+    public function showAction(League $league)
+    {
+        $players = $league->getUsers();
+
+        return [
+            'league' => $league,
+            'players' => $players
+        ];
     }
 }

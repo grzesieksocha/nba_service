@@ -7,11 +7,20 @@
         <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+    {% include '@App/nav.html.twig' %}
+    {% block jumbotron %}{% endblock %}
+    <div class="container">
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <hr>
+        {%  include '@App/footer.html.twig' %}
+    </div>
+    {% block javascripts %}
+    <script href="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+    {% endblock %}
     </body>
 </html>
