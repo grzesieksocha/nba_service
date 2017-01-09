@@ -17,15 +17,19 @@ class LeagueHasUserRepository extends EntityRepository
 {
     public function getLeaguesForUser(User $user)
     {
+        $query =  $this->_em->createQueryBuilder()
+            ->select('lhu')
+            ->from('AppBundle:LeagueHasUser', 'lhu')
+            ->andWhere('lhu.isActive = true');
+
+        if (false === $user->hasRole('ROLE_ADMIN')) {
+            $query->andWhere('lhu.user = :user')
+                ->setParameter('user', $user);
+        }
+
+        $leaguesHasUser = $query->getQuery()->getResult();
+
         $leagues = [];
-        $leaguesHasUser = $this->_em->createQueryBuilder()
-            ->select('lhp')
-            ->from('AppBundle:LeagueHasUser', 'lhp')
-            ->andWhere('lhp.user = :user')
-            ->andWhere('lhp.isActive = true')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
         /** @var LeagueHasUser $leagueHasUser */
         foreach ($leaguesHasUser as $leagueHasUser) {
             $leagues[] = $leagueHasUser->getLeague();

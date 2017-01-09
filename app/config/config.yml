@@ -63,7 +63,7 @@ fos_user:
     user_class: AppBundle\Entity\User
     registration:
         confirmation:
-            enabled: true
+#            enabled: true
     from_email:
         address:        grzesiek.soch@gmail.com
         sender_name:    NBA_fun
