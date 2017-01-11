@@ -8,6 +8,9 @@
         {% if league.isPrivate %}
             (private)
         {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-success" href="{{ path('league_edit', {'id': league.id}) }}">Edit</a>
+        {% endif %}
     </h3>
     <strong>Players:</strong>
     {% if players %}

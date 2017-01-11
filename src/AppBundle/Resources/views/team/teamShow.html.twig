@@ -1,0 +1,21 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}NBA Play-Off{% endblock %}
+
+{% block body %}
+    <h3>
+        {{ team.firstName }} {{ team.lastName }} ({{ team.short }}) <a class="btn btn-success" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
+    </h3>
+    <strong><h4>Basic information:</h4></strong>
+    <ol>
+        <li><strong>Division:</strong> {{ team.division.name }}</li>
+        <li><strong>Conference:</strong> {{ team.conference.name }}</li>
+        <li><strong>Site:</strong> {{ team.siteName }}</li>
+        <li><strong>City:</strong> {{ team.city }}</li>
+        <li><strong>State:</strong> {{ team.state }}</li>
+        <li><strong>Coach:</strong> adam awesome guy</li>
+    </ol>
+    Players:
+    #list of awesome players
+
+{% endblock %}

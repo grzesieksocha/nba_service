@@ -42,10 +42,6 @@ body {
     padding: 20px;
 }
 
-.main-body {
-    max-width: 1000px;
-}
-
 .btn-nav {
     color: #fff;
     background-color: #5cb85c;
@@ -55,4 +51,8 @@ body {
 .sidebar-section-title {
     padding: 10px;
     font-size: 20px;
+}
+
+.section-title {
+    text-align: center;
 }

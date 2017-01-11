@@ -3,9 +3,16 @@
 {% block title %}NBA Play-Off{% endblock %}
 
 {% block body %}
-    <a class="btn btn-success" href="{{ path('league_new') }}">Create new</a>
+    <div class="row">
+        <h2 class="section-title">Leagues management</h2>
+    <a class="btn btn-success" href="{{ path('league_list') }}">Show list</a>
+    <a class="btn btn-success" href="{{ path('league_add') }}">Create new</a>
     {% if leagues %}
-        <h3>Your leagues:</h3>
+        {% if is_granted('ROLE_ADMIN') %}
+            <h3>All leagues:</h3>
+        {% else %}
+            <h3>Your leagues:</h3>
+        {% endif %}
         <ol>
         {% for league in leagues %}
             <li><a href="{{ path('league_show', {'id': league.id}) }}">{{ league.name }}</a></li>
@@ -14,4 +21,5 @@
     {% else %}
         You do not have any leagues!
     {% endif %}
+    </div>
 {% endblock %}

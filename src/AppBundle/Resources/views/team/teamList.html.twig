@@ -1,0 +1,21 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}NBA Play-Off{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h2 class="section-title">Team management</h2>
+    <a class="btn btn-success" href="{{ path('team_list') }}">Show list</a>
+    <a class="btn btn-success" href="{{ path('team_add') }}">Add new</a>
+    {% if teams %}
+        <h3>All teams:</h3>
+        <ol>
+        {% for team in teams %}
+            <li><a href="{{ path('team_show', {'id': team.id}) }}">{{ team.firstName }} {{ team.lastName }}</a></li>
+        {% endfor %}
+        </ol>
+    {% else %}
+        You do not have any teams in your app ^^ !
+    {% endif %}
+    </div>
+{% endblock %}

@@ -30,6 +30,11 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    number_format:
+        thousands_separator: ','
+    form_themes:
+        - bootstrap_3_layout.html.twig
+
 
 doctrine:
     dbal:

@@ -37,4 +37,9 @@ class LeagueType extends AbstractType
             'data_class' => League::class
         ]);
     }
+
+    public function getName()
+    {
+        return 'league_type';
+    }
 }
