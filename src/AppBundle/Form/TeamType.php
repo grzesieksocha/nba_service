@@ -18,8 +18,8 @@ class TeamType extends AbstractType
         $builder->add('siteName', TextType::class);
         $builder->add('city', TextType::class);
         $builder->add('state', TextType::class);
-        $builder->add('conference', SubmitType::class);
-        $builder->add('division', PasswordType::class);
+        $builder->add('conference');
+        $builder->add('division');
     }
 
     public function configureOptions(OptionsResolver $resolver)

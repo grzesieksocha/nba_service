@@ -49,6 +49,14 @@ class Conference
         $this->teams = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     public function getId()
     {
         return $this->id;

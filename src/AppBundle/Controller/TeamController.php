@@ -30,7 +30,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="team_show")
+     * @Route("/{id}", name="team_show", requirements={"id": "\d+"})
      * @Template("@App/team/teamShow.html.twig")
      *
      * @param Team $team
@@ -44,15 +44,21 @@ class TeamController extends Controller
 
     /**
      * @Route("/edit/{id}", name="team_edit")
-     * @Template("@App/team/teamForm.html.twig")
+     * @Template("@App/team/teamType.html.twig")
+     *
+     * @param Request $request
+     * @param Team $team
+     *
+     * @return array
      */
-    public function editAction(Team $team)
+    public function editAction(Request $request, Team $team)
     {
+        return $this->processForm($request, $team);
     }
 
     /**
      * @Route("/add", name="team_add")
-     * @Template("@App/team/teamShow.html.twig")
+     * @Template("@App/team/teamType.html.twig")
      *
      * @param Request $request
      *
@@ -60,13 +66,33 @@ class TeamController extends Controller
      */
     public function addAction(Request $request)
     {
-        $form = $this->createForm(TeamType::class);
+        return $this->processForm($request);
+    }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     *
+     * @return array
+     */
+    private function processForm(Request $request, Team $team = null)
+    {
+        $form = $this->createForm(TeamType::class, $team);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Team $team */
+            $team = $form->getData();
+            $team->setIsActive(true);
 
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($team);
+            $em->flush();
+
+            $this->addFlash('success', 'Team created! Let\'s play!!!');
+
+            return $this->redirectToRoute('team_list');
         }
-
 
         return ['form' => $form->createView()];
     }

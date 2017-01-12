@@ -16,7 +16,13 @@
         {% include '@App/nav.html.twig' %}
         <div class="row">
             {{ include('@App/sidebar.html.twig') }}
-            <div class="col-sm-10 col-sm-offset-2 col-md-11 col-md-offset-1 main">
+            <div class="col-md-10 col-md-offset-2 main">
+                {% for msg in app.session.flashBag.get('success') %}
+                <div class="alert alert-success">
+                    {{ msg }}
+                </div>
+                {% endfor  %}
+
                 {% block body %}{% endblock %}
             </div>
         </div>

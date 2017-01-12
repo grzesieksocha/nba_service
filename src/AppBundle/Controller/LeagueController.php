@@ -89,10 +89,15 @@ class LeagueController extends Controller
             $leagueHasUser->setUser($user);
             $leagueHasUser->setIsLeagueAdmin(true);
             $leagueHasUser->setIsActive(LeagueHasUser::V_ACTIVE);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($league);
             $em->persist($leagueHasUser);
             $em->flush();
+
+            $this->addFlash('success', 'League created! Let\'s play!!!');
+
+            return $this->redirectToRoute('league_list');
         }
 
         return ['form' => $form->createView()];
