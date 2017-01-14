@@ -70,6 +70,16 @@ class Team
     private $players;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Match", mappedBy="homeTeam")
+     */
+    private $matchesHome;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Match", mappedBy="awayTeam")
+     */
+    private $matchesAway;
+
+    /**
      * @ORM\Column(name="last_change_on", type="datetime")
      */
     private $lastChangeOn;
@@ -82,6 +92,16 @@ class Team
     public function __construct()
     {
         $this->players = new ArrayCollection();
+        $this->matchesHome = new ArrayCollection();
+        $this->matchesAway = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+     return ucwords($this->getFirstName() . ' ' . $this->getLastName());
     }
 
     /**
@@ -191,6 +211,22 @@ class Team
     public function getPlayers()
     {
         return $this->players;
+    }
+
+    /**
+     * @return ArrayCollection|Match[]
+     */
+    public function getMatchesHome()
+    {
+        return $this->matchesHome;
+    }
+
+    /**
+     * @return ArrayCollection|Match[]
+     */
+    public function getMatchesAway()
+    {
+        return $this->matchesAway;
     }
 
     /**

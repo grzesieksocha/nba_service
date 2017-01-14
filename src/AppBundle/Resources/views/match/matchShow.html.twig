@@ -1,0 +1,11 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}NBA Play-Off{% endblock %}
+
+{% block body %}
+    <h2>{{ match.date|date('d-M G:i A') }} - {{ match.awayTeam }} @ {{ match.homeTeam }}</h2>
+    {{ match.awayTeam }}: {{ match.awayTeamPoints }}<br>
+    {{ match.homeTeam }}: {{ match.homeTeamPoints }}
+
+    Players statistics incoming!!!
+{% endblock %}

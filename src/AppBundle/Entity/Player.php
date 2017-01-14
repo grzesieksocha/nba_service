@@ -45,9 +45,14 @@ class Player
     private $team;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Statistics", inversedBy="player")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Statistics", mappedBy="player")
      */
     private $statistics;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pick", mappedBy="player")
+     */
+    protected $picks;
 
     /**
      * @ORM\Column(name="last_change_on", type="datetime")
@@ -62,6 +67,7 @@ class Player
     public function __construct()
     {
         $this->statistics = new ArrayCollection();
+        $this->picks = new ArrayCollection();
     }
 
     /**
@@ -172,6 +178,14 @@ class Player
     {
         $this->isActive = $isActive;
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Pick[]
+     */
+    public function getPicks()
+    {
+        return $this->picks;
     }
 
     /**

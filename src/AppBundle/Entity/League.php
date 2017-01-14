@@ -50,6 +50,11 @@ class League
     private $leagueHasUser;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pick", mappedBy="league")
+     */
+    protected $picks;
+
+    /**
      * @ORM\Column(name="last_change_on", type="datetime")
      */
     private $lastChangeOn;
@@ -62,6 +67,7 @@ class League
     public function __construct()
     {
         $this->leagueHasUser = new ArrayCollection();
+        $this->picks = new ArrayCollection();
     }
 
     /**
@@ -154,6 +160,14 @@ class League
     public function getLeagueHasUsers()
     {
         return $this->leagueHasUser;
+    }
+
+    /**
+     * @return ArrayCollection|Pick[]
+     */
+    public function getPicks()
+    {
+        return $this->picks;
     }
 
     public function getLastChangeOn()

@@ -1,0 +1,21 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}NBA Play-Off{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h2 class="section-title">Matches management</h2>
+    <a class="btn btn-success" href="{{ path('match_list') }}">Show list</a>
+    <a class="btn btn-success" href="{{ path('match_add') }}">Add match</a>
+    {% if matches %}
+        <h3>All matches:</h3>
+        <ol>
+        {% for match in matches %}
+            <li><a href="{{ path('match_show', {'id': match.id}) }}">{{ match.date|date('d-M G:i A') }} - {{ match.awayTeam }} @ {{ match.homeTeam }}</a></li>
+        {% endfor %}
+        </ol>
+    {% else %}
+        You do not have any matches in App :O!
+    {% endif %}
+    </div>
+{% endblock %}

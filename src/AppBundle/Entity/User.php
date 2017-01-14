@@ -25,10 +25,16 @@ class User extends BaseUser
      */
     protected $leagueHasUser;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pick", mappedBy="user")
+     */
+    protected $picks;
+
     public function __construct()
     {
         parent::__construct();
 
+        $this->picks = new ArrayCollection();
         $this->leagueHasUser = new ArrayCollection();
     }
 
@@ -38,6 +44,14 @@ class User extends BaseUser
     public function getLeagueHasUsers()
     {
         return $this->leagueHasUser;
+    }
+
+    /**
+     * @return ArrayCollection|Pick[]
+     */
+    public function getPicks()
+    {
+        return $this->picks;
     }
 
     /**

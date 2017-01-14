@@ -10,7 +10,7 @@ use \DateTime;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name = "match")
+ * @ORM\Table(name = "game")
  * @ORM\HasLifecycleCallbacks()
  */
 class Match
@@ -43,11 +43,15 @@ class Match
     private $date;
 
     /**
+     * @var int
+     *
      * @ORM\Column(name="home_team_points")
      */
     private $homeTeamPoints;
 
     /**
+     * @var int
+     *
      * @ORM\Column(name="away_team_points")
      */
     private $awayTeamPoints;
@@ -225,7 +229,4 @@ class Match
     {
         $this->setLastChangeOn(new DateTime(date('Y-m-d H:i:s')));
     }
-
-
-
 }
