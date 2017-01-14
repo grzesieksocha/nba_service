@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use \DateTime;
@@ -64,6 +65,11 @@ class Team
     private $state;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Player", mappedBy="team")
+     */
+    private $players;
+
+    /**
      * @ORM\Column(name="last_change_on", type="datetime")
      */
     private $lastChangeOn;
@@ -72,6 +78,11 @@ class Team
      * @ORM\Column(name = "is_active", type = "boolean")
      */
     private $isActive;
+
+    public function __construct()
+    {
+        $this->players = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -172,6 +183,14 @@ class Team
     public function setState($state)
     {
         $this->state = $state;
+    }
+
+    /**
+     * @return ArrayCollection|Player[]
+     */
+    public function getPlayers()
+    {
+        return $this->players;
     }
 
     /**

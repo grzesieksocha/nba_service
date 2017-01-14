@@ -3,8 +3,12 @@
 {% block title %}NBA Play-Off{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">Save</button>
-    {{ form_end(form) }}
+    <div class="col-md-8">
+        <h2 class="text-center">Add a new league</h2>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success center-block">Save</button>
+        {{ form_end(form) }}
+        <span>@future - invite players</span>
+    </div>
 {% endblock %}

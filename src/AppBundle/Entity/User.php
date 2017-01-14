@@ -32,28 +32,6 @@ class User extends BaseUser
         $this->leagueHasUser = new ArrayCollection();
     }
 
-//    /**
-//     * @param LeagueHasUser $leagueHasUser
-//     *
-//     * @return User
-//     */
-//    public function addLeagueHasUser(LeagueHasUser $leagueHasUser)
-//    {
-//        $this->leagueHasUser->add($leagueHasUser);
-//        return $this;
-//    }
-
-//    /**
-//     * @param LeagueHasUser $leagueHasUser
-//     *
-//     * @return User
-//     */
-//    public function removeLeagueHasUser(LeagueHasUser $leagueHasUser)
-//    {
-//        $this->leagueHasUser->removeElement($leagueHasUser);
-//        return $this;
-//    }
-
     /**
      * @return ArrayCollection|LeagueHasUser[]
      */

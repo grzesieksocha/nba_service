@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Team;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,8 +19,14 @@ class TeamType extends AbstractType
         $builder->add('siteName', TextType::class);
         $builder->add('city', TextType::class);
         $builder->add('state', TextType::class);
-        $builder->add('conference');
-        $builder->add('division');
+        $builder->add('conference', EntityType::class, [
+            'class' => 'AppBundle\Entity\Conference',
+            'placeholder' => 'Please choose a conference'
+        ]);
+        $builder->add('division', EntityType::class, [
+            'class' => 'AppBundle\Entity\Division',
+            'placeholder' => 'Please choose a division'
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

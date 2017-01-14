@@ -156,25 +156,6 @@ class League
         return $this->leagueHasUser;
     }
 
-//    /**
-//     * @param LeagueHasUser $leagueHasUser
-//     *
-//     * @return League
-//     */
-//    public function addLeagueHasUser(LeagueHasUser $leagueHasUser)
-//    {
-//        $this->leagueHasUser->add($leagueHasUser);
-//        return $this;
-//    }
-//
-//    /**
-//     * @param LeagueHasUser $leagueHasUser
-//     */
-//    public function removeLeagueHasUser(LeagueHasUser $leagueHasUser)
-//    {
-//        $this->leagueHasUser->removeElement($leagueHasUser);
-//    }
-
     public function getLastChangeOn()
     {
         return $this->lastChangeOn;

@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\League;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,7 +26,9 @@ class LeagueType extends AbstractType
             'expanded' => true,
             'multiple' => false
         ]);
-        $builder->add('password', TextType::class);
+        $builder->add('password', PasswordType::class, [
+            'required' => false
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
