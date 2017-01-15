@@ -3,11 +3,12 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{{ path('homepage') }}">Nba Playoff's game</a>
+            <a class="navbar-brand" href="{{ path('homepage') }}">NBA PLAY-OFF DRIVE</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             {% if app.user %}
                 <div class=" navbar-form navbar-right">
+                    <span class="login">Logged in as {{ app.user.username }}</span>
                     <a href="{{ path('fos_user_security_logout') }}" class="btn btn-nav btn-success">Log out</a>
                 </div>
             {% else %}

@@ -56,3 +56,9 @@ body {
 .section-title {
     text-align: center;
 }
+
+.login {
+    color: yellow;
+    font-weight: bold;
+    padding: 0 20px;
+}
