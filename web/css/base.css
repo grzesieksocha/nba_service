@@ -1,64 +1,40 @@
-body {
-    padding-top: 50px;
+.container {
+    max-width: 1000px;
 }
 
-.navbar-fixed-top {
+hr {
     border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
 }
 
-.sidebar {
-    max-width: 250px;
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
+body {
+    padding-top: 20px;
 }
 
-/* Sidebar navigation */
-.nav-sidebar {
-    margin-right: -21px; /* 20px padding + 1px border */
-    margin-bottom: 20px;
-    margin-left: -20px;
-}
-.nav-sidebar > li > a {
-    padding-right: 20px;
-    padding-left: 20px;
-}
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-    color: #fff;
-    background-color: #428bca;
+.top-box {
+    height: 75px;
 }
 
-.main {
-    padding: 20px;
+.top-box-middle-menu {
+    padding-top: 27px;
 }
 
-.btn-nav {
-    color: #fff;
-    background-color: #5cb85c;
-    border-color: #4cae4c;
+.top-box-right-menu {
+    padding-top: 21px;
 }
 
-.sidebar-section-title {
-    padding: 10px;
-    font-size: 20px;
+.top-box-right-buttons {
+    margin-left: 20px;
+    padding-top: 21px;
 }
 
-.section-title {
-    text-align: center;
+.form-group-top {
+    margin-bottom: 5px;
 }
 
-.login {
-    color: yellow;
-    font-weight: bold;
-    padding: 0 20px;
+.remember_me {
+    margin-right: 41px;
 }
+

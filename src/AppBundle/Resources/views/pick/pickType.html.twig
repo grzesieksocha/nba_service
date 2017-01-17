@@ -1,0 +1,13 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}Pick a player{% endblock %}
+
+{% block body %}
+    <div class="col-md-8">
+        <h2 class="text-center">Add a new match</h2>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success center-block">Save</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

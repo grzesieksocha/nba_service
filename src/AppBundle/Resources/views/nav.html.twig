@@ -1,43 +1,40 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{ path('homepage') }}">NBA PLAY-OFF DRIVE</a>
+<div class="col-md-12">
+    <div class="row top-box">
+        <div class="col-md-4">
+            <h3><a class="text-left" href="{{ path('homepage') }}">NBA PLAY-OFF GAME ON!</a></h3>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            {% if app.user %}
-                <div class=" navbar-form navbar-right">
-                    <span class="login">Logged in as {{ app.user.username }}</span>
-                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-nav btn-success">Log out</a>
-                </div>
-            {% else %}
-            <form action="{{ path("fos_user_security_check") }}" method="post" class="navbar-form navbar-right">
-
-                {% if csrf_token %}
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-                {% endif %}
-
-                <div class="form-group">
-                    <input type="text" id="username" name="_username" placeholder="Username" required="required" />
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" name="_password" placeholder="Password" required="required" />
-                </div>
-                <div class="form-group">
-                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                    <label for="remember_me" class="text-success">{{ 'security.login.remember_me'|trans }}</label>
-                </div>
-                <input type="submit" class="btn btn-success" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-                <a href="{{ path('fos_user_registration_register') }}" class="btn btn-nav btn-success">Register</a>
-            </form>
-            {% endif %}
-            <ul class="nav navbar-nav navbar-right">
+        <div class="col-md-3">
+            <ul class="list-inline list-unstyled top-box-middle-menu">
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="#">Settings</a></li>
                 <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
             </ul>
         </div>
+        <div class="col-md-5">
+            {% if app.user %}
+                <p class="text-center top-box-right-menu">
+                    <span class="login">Logged in as {{ app.user.username }}</span>
+                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-success">Log out</a>
+                </p>
+            {% else %}
+                <form class="" action="{{ path("fos_user_security_check") }}" method="post">
+                    {% if csrf_token %}
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                    {% endif %}
+                    <div class="form-group-top form-inline">
+                        <input type="text" id="username" name="_username" placeholder="Username" required="required" />
+                        <input type="password" id="password" name="_password" placeholder="Password" required="required" />
+                    </div>
+                    <div class="form-group-top">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        <label for="remember_me" class="text-success remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                        <input type="submit" class="btn btn-success" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+                        <a href="{{ path('fos_user_registration_register') }}" class="btn btn-success">Register</a>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
     </div>
-</nav>
+</div>

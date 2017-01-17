@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use \DateTime;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\MatchRepository")
  * @ORM\Table(name = "game")
  * @ORM\HasLifecycleCallbacks()
  */
