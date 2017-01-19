@@ -1,11 +1,7 @@
-<div class="col-md-2 sidebar">
-    <ul class="nav nav-sidebar">
-    {% if is_granted('ROLE_ADMIN') %}
-        {{ include('@App/admin/adminSidebar.html.twig') }}
-    {% elseif is_granted('ROLE_USER') %}
-        {{ include('@App/user/userSidebar.html.twig') }}
-    {% else %}
-        {{ include('@App/anonymous/anonymousSidebar.html.twig') }}
-    {% endif %}
-    </ul>
+<div class="list-group">
+{% if is_granted('ROLE_ADMIN') %}
+    {{ include('@App/admin/adminSidebar.html.twig') }}
+{% elseif is_granted('ROLE_USER') %}
+    {{ include('@App/user/userSidebar.html.twig') }}
+{% endif %}
 </div>

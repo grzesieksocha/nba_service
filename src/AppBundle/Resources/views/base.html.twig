@@ -16,13 +16,15 @@
         <div class="row">
             {% include '@App/nav.html.twig' %}
         </div>
-        <hr class="">
+        <hr>
         <div class="row">
             {% if app.user %}
-                {{ include('@App/sidebar.html.twig') }}
-                <div class="col-md-10 col-md-offset-2 main">
+                <div class="col-md-3">
+                    {{ include('@App/sidebar.html.twig') }}
+                </div>
+                <div class="col-md-9 main-body">
             {% else %}
-                <div class="col-md-12 main">
+                <div class="col-md-12 main-body">
             {% endif %}
                 {% for msg in app.session.flashBag.get('success') %}
                 <div class="alert alert-success">

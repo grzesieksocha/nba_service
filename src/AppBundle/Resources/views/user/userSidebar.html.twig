@@ -1,4 +1,16 @@
-<li><a href="{{ path('pick_new') }}">Pick</a></li>
-<li class="active"><a href="{{ path('league_list') }}">Leagues</a></li>
-<li><a href="#">user</a></li>
-<li><a href="#">user</a></li>
+{% set leagues = my_leagues.getLeaguesForUser() %}
+
+{% if leagues != null %}
+    <a href="{{ path('league_list') }}" class="list-group-item">Active leagues</a>
+        <ul class="list-group inner">
+
+        {% for league in leagues %}
+            {# @var league \AppBundle\Entity\League #}
+            <a href="{{ path('league_show', {'id': league.id}) }}" class="list-group-item">{{ league.name }}</a>
+        {% endfor %}
+        </ul>
+{% else %}
+    <p>You do not have active leagues yet!</p>
+{% endif %}
+<a href="{{ path('pick_new') }}" class="list-group-item">Pick a player</a>
+<a href="{{ path('pick_new') }}" class="list-group-item">Something next</a>

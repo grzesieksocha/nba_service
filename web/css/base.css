@@ -38,3 +38,23 @@ body {
     margin-right: 41px;
 }
 
+.main-body {
+    padding-left: 60px;
+}
+
+.list-group.inner {
+    font-size: 15px;
+    text-align: center;
+    margin: 20px 30px;
+}
+
+.list-group {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
