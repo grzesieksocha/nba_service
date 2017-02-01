@@ -25,16 +25,23 @@ class MatchType extends AbstractType
                 'placeholder' => 'Please choose an away team'
             ])
             ->add('date', DateTimeType::class, [
+                'date_widget' => 'single_text',
+                'label' => 'Match date (ET)',
                 'data' => new DateTime()
             ])
             ->add('homeTeamPoints', IntegerType::class, [
+                'data' => 0,
                 'required' => false
             ])
             ->add('awayTeamPoints', IntegerType::class, [
+                'data' => 0,
                 'required' => false
             ]);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -42,6 +49,9 @@ class MatchType extends AbstractType
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'team_type';

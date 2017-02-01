@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -42,7 +42,7 @@ class MatchController extends Controller
      */
     public function showAction(Match $match)
     {
-        #TODO players statistics in a beautiful table!
+        //TODO players statistics in a beautiful table!
         return ['match' => $match];
     }
 
@@ -51,7 +51,7 @@ class MatchController extends Controller
      * @Template("@App/match/matchType.html.twig")
      *
      * @param Request $request
-     * @param Match $match
+     * @param Match   $match
      *
      * @return array
      */
@@ -75,7 +75,7 @@ class MatchController extends Controller
 
     /**
      * @param Request $request
-     * @param Match $match
+     * @param Match   $match
      *
      * @return array|RedirectResponse
      */

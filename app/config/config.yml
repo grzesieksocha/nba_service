@@ -1,7 +1,8 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: services.yml }
+    - { resource: services/services.yml }
+    - { resource: services/repository_services.yml }
 
 framework:
     translator:      { fallbacks: ["%locale%"] }
@@ -35,7 +36,7 @@ twig:
     form_themes:
         - bootstrap_3_horizontal_layout.html.twig
     globals:
-        my_leagues: '@app.service.template_user_data'
+        active_leagues_provider: '@app.provider.active_leagues'
 
 doctrine:
     dbal:

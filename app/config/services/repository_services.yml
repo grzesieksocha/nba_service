@@ -1,0 +1,18 @@
+services:
+    repository.league_has_user:
+        class: Doctrine\ORM\EntityRepository
+        factory: 'doctrine.orm.entity_manager:getRepository'
+        arguments:
+            - AppBundle\Entity\LeagueHasUser
+
+    repository.pick:
+        class: Doctrine\ORM\EntityRepository
+        factory: 'doctrine.orm.entity_manager:getRepository'
+        arguments:
+            - AppBundle\Entity\Pick
+
+    repository.match:
+        class: Doctrine\ORM\EntityRepository
+        factory: 'doctrine.orm.entity_manager:getRepository'
+        arguments:
+            - AppBundle\Entity\Match

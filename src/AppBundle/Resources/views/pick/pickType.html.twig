@@ -3,11 +3,18 @@
 {% block title %}Pick a player{% endblock %}
 
 {% block body %}
-    <div class="col-md-8">
-        <h2 class="text-center">Add a new match</h2>
+    <div class="col-md-10">
+        <h2 class="text-center">Add a new pick to rule the world!</h2>
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <button type="submit" class="btn btn-success center-block">Save</button>
         {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/pick.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ asset('js/fos_js_routes.js') }}"></script>
 {% endblock %}

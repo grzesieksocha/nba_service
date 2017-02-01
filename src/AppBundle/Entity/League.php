@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -64,6 +64,9 @@ class League
      */
     private $isActive;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->leagueHasUser = new ArrayCollection();
@@ -214,6 +217,9 @@ class League
         $this->setLastChangeOn(new DateTime(date('Y-m-d H:i:s')));
     }
 
+    /**
+     * @return array
+     */
     public function getUsers()
     {
         $users = [];
