@@ -3,8 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Match;
+use AppBundle\Entity\Statistics;
+use AppBundle\Entity\Team;
 use AppBundle\Form\MatchType;
 
+use AppBundle\Repository\StatisticsRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -42,8 +45,15 @@ class MatchController extends Controller
      */
     public function showAction(Match $match)
     {
-        //TODO players statistics in a beautiful table!
-        return ['match' => $match];
+        $em = $this->getDoctrine()->getManager();
+        $allStats = $em->getRepository('AppBundle:Statistics')->getStatsForMatch($match);
+        $stats = [];
+        /** @var Statistics $statistic */
+        foreach ($allStats as $statistic) {
+            $stats[$statistic->getPlayer()->getId()] = $statistic;
+        }
+
+        return ['match' => $match, 'stats' => $stats];
     }
 
     /**
@@ -57,6 +67,8 @@ class MatchController extends Controller
      */
     public function editAction(Request $request, Match $match)
     {
+
+
         return $this->processForm($request, $match);
     }
 

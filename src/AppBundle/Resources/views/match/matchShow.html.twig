@@ -3,9 +3,59 @@
 {% block title %}NBA Play-Off{% endblock %}
 
 {% block body %}
-    <h2>{{ match.date|date('d-M G:i A') }} - {{ match.awayTeam }} @ {{ match.homeTeam }}</h2>
-    {{ match.awayTeam }}: {{ match.awayTeamPoints }}<br>
-    {{ match.homeTeam }}: {{ match.homeTeamPoints }}
+    <h2 class="text-center">{{ match.awayTeam }} @ {{ match.homeTeam }}<a class="btn btn-success" style="margin-left: 30px" href="{{ path('match_edit', {'id': match.id}) }}">Edit</a></h2>
+    <h4 class="text-center">{{ match.date|date('d-M G:i A') }}</h4>
+    <br>
 
-    Players statistics incoming!!!
+    <h3>Score: {{ match.awayTeam }}: {{ match.awayTeamPoints }} / {{ match.homeTeam }}: {{ match.homeTeamPoints }}</h3>
+    {% set teams = [match.awayTeam, match.homeTeam] %}
+
+    {% for team in teams %}
+        <h3>{{ team }}:</h3>
+        {% if team.players %}
+            <table class="table table-bordered text-center">
+                <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Player</td>
+                    <td>Minutes</td>
+                    <td>Points</td>
+                    <td>Rebounds</td>
+                    <td>Assists</td>
+                    <td>Blocks</td>
+                    <td>Steals</td>
+                    <td>Turnovers</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for player in team.players %}
+                    <tr>
+                        <td>{{ player.number }}</td>
+                        <td>{{ player }}</td>
+                    {% if stats[player.id] is defined %}
+                        {% set personalStats = stats[player.id] %}
+                        <td>{{ personalStats.minutes }}</td>
+                        <td>{{ personalStats.points }}</td>
+                        <td>{{ personalStats.rebounds }}</td>
+                        <td>{{ personalStats.assists }}</td>
+                        <td>{{ personalStats.blocks }}</td>
+                        <td>{{ personalStats.steals }}</td>
+                        <td>{{ personalStats.turnovers }}</td>
+                    {% else %}
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>---</td>
+                    {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            Add players first!
+        {% endif %}
+    {% endfor %}
 {% endblock %}

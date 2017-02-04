@@ -6,6 +6,7 @@ use AppBundle\Entity\League;
 use AppBundle\Repository\LeagueHasUserRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class ActiveLeaguesProvider
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 class ActiveLeaguesProvider
 {
     /**
-     * @var  TokenStorage
+     * @var TokenStorageInterface
      */
     private $tokenStorage;
     /**
@@ -24,12 +25,12 @@ class ActiveLeaguesProvider
     private $leagueHasUserRepository;
 
     /**
-     * @param $tokenStorage
+     * @param TokenStorageInterface $tokenStorage
      * @param ObjectRepository $leagueHasUserRepository
      */
-    public function __construct($tokenStorage, ObjectRepository $leagueHasUserRepository)
+    public function __construct(TokenStorageInterface $tokenStorage, ObjectRepository $leagueHasUserRepository)
     {
-        $this->tokenStorage = $tokenStorage[0];
+        $this->tokenStorage = $tokenStorage;
         $this->leagueHasUserRepository = $leagueHasUserRepository;
     }
 
@@ -46,6 +47,12 @@ class ActiveLeaguesProvider
      */
     private function getUser()
     {
-        return $this->tokenStorage->getToken()->getUser();
+        $user = $this->tokenStorage->getToken()->getUser();
+        if (!$user) {
+            throw new \LogicException(
+                'The user is not authenticated!!!'
+            );
+        }
+        return $user;
     }
 }

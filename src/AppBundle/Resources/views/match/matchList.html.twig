@@ -11,7 +11,7 @@
         <h3>All matches:</h3>
         <ol>
         {% for match in matches %}
-            <li><a href="{{ path('match_show', {'id': match.id}) }}">{{ match.date|date('d-M G:i A') }} - {{ match.awayTeam }} @ {{ match.homeTeam }}</a></li>
+            <li><a href="{{ path('match_show', {'id': match.id}) }}">{{ match.date|date('d-M G:i A') }} - ({{ match.awayTeamPoints }} : {{ match.homeTeamPoints }}) {{ match.awayTeam }} @ {{ match.homeTeam }}</a></li>
         {% endfor %}
         </ol>
     {% else %}

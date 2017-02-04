@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use \DateTime;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerRepository")
  * @ORM\Table(name="player")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -64,10 +64,21 @@ class Player
      */
     private $isActive;
 
+    /**
+     * Constructor...
+     */
     public function __construct()
     {
         $this->statistics = new ArrayCollection();
         $this->picks = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
     /**
@@ -194,14 +205,20 @@ class Player
      */
     public function updateLastChangedOn()
     {
-        $this->setLastChangeOn(new DateTime(date('Y-m-d H:i:s')));
+        $this->setLastChangeOn(new DateTime());
     }
 
-    public function setLastChangeOn($lastChangeOn)
+    /**
+     * @param DateTime $lastChangeOn
+     */
+    public function setLastChangeOn(DateTime $lastChangeOn)
     {
         $this->lastChangeOn = $lastChangeOn;
     }
 
+    /**
+     * @return DateTime
+     */
     public function getLastChangeOn()
     {
         return $this->lastChangeOn;

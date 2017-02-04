@@ -16,6 +16,13 @@
         <li><strong>Coach:</strong> adam awesome guy</li>
     </ol>
     Players:
-    #list of awesome players
-
+    {% if team.players %}
+        <ol>
+        {% for player in team.players %}
+            <li><a href="{{ path('player_show', {'id': player.id}) }}">{{ player.firstName }} {{ player.lastName }} ({{ player.Number }}) - {{ player.team.short }}</a></li>
+        {% endfor %}
+        </ol>
+    {% else %}
+        No players here :(
+    {% endif %}
 {% endblock %}

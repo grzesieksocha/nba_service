@@ -7,7 +7,7 @@ services:
     app.provider.active_leagues:
         class: AppBundle\Service\ActiveLeaguesProvider
         arguments:
-            - ['@security.token_storage']
+            - '@security.token_storage'
             - '@repository.league_has_user'
 
     app.provider.player_league_picks:
@@ -21,3 +21,6 @@ services:
         class: AppBundle\Service\NextMatchProvider
         arguments:
             - '@repository.match'
+
+    app.provider.stats:
+        class: AppBundle\Service\StatsProvider

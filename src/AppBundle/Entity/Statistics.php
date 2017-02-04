@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -10,7 +10,7 @@ use \DateTime;
  * Statistics
  *
  * @ORM\Table(name="statistics")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\StatisticsRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Statistics

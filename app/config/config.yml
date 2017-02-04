@@ -34,9 +34,10 @@ twig:
     number_format:
         thousands_separator: ','
     form_themes:
-        - bootstrap_3_horizontal_layout.html.twig
+#        - bootstrap_3_horizontal_layout.html.twig
     globals:
         active_leagues_provider: '@app.provider.active_leagues'
+        statistics_repository: '@repository.statistics'
 
 doctrine:
     dbal:

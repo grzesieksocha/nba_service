@@ -1,0 +1,19 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}{{ player.firstName }} {{ player.lastName }}{% endblock %}
+
+{% block body %}
+    <h3>
+        {{ player.firstName }} {{ player.lastName }} ({{ player.Number }}) - {{ player.team.short }} <a class="btn btn-success" href="{{ path('team_edit', {'id': player.id}) }}">Edit</a>
+    </h3>
+    <h4><strong>Player information:</strong></h4>
+    <ol>
+        <li><strong>Name:</strong> {{ player.firstName }}</li>
+        <li><strong>Surname:</strong> {{ player.lastName }}</li>
+        <li><strong>Number:</strong> {{ player.number }}</li>
+        <li><strong>Team:</strong> {{ player.team.firstName }} {{ player.team.lastName }}</li>
+    </ol>
+    Stats:
+    #list of awesome (hope so...) stats
+
+{% endblock %}

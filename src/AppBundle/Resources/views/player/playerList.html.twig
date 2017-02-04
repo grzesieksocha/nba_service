@@ -1,0 +1,22 @@
+{% extends '@App/base.html.twig' %}
+
+{% block title %}List of players{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h2 class="section-title">Players management</h2>
+        <a class="btn btn-success" href="{{ path('player_list') }}">List players</a>
+        <a class="btn btn-success" href="{{ path('player_add') }}">Add player</a>
+        {% if players %}
+            <h3>All Players:</h3>
+            <ol>
+                {% for player in players %}
+                    <li><a href="{{ path('player_show', {'id': player.id}) }}">{{ player.firstName }} {{ player.lastName }} ({{ player.Number }}) - {{ player.team.short }}</a></li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            You do not have any players in your app ^^ !
+        {% endif %}
+    </div>
+{% endblock %}
+

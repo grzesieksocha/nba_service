@@ -1,0 +1,35 @@
+.title {
+    font-size: 30px;
+    padding-bottom: 20px;
+    margin-top: 0;
+}
+
+.team-input {
+    width: 230px;
+    align-content: center;
+    margin-right: 25px;
+    margin-left: 15px;
+}
+
+.points-input {
+    width: 50px;
+    margin-left: 15px;
+}
+
+.table-main {
+    font-size: 20px;
+}
+
+.table-title {
+    font-size: 15px;
+    text-decoration: solid;
+}
+
+.at {
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.js-datepicker {
+    margin-left: 30px;
+}

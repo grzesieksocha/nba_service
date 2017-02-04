@@ -16,3 +16,9 @@ services:
         factory: 'doctrine.orm.entity_manager:getRepository'
         arguments:
             - AppBundle\Entity\Match
+
+    repository.statistics:
+        class: Doctrine\ORM\EntityRepository
+        factory: 'doctrine.orm.entity_manager:getRepository'
+        arguments:
+            - AppBundle\Entity\Statistics

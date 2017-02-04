@@ -2,9 +2,9 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Pick;
-
+use AppBundle\Entity\Player;
 use AppBundle\Repository\MatchRepository;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -33,7 +33,12 @@ class PickType extends AbstractType
             ])
             ->add('match', ChoiceType::class, [
                 'mapped' => false,
-                'placeholder' => 'Waiting for a date...',
+                'placeholder' => 'Choose a date...',
+                'disabled' => true
+            ])
+            ->add('player', ChoiceType::class, [
+                'mapped' => false,
+                'placeholder' => 'Then choose a match...',
                 'disabled' => true
             ]);
     }
@@ -44,7 +49,7 @@ class PickType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-           'data_class' => Pick::class
+           'data_class' => Player::class
         ]);
 
         $resolver->setRequired('match_repository');

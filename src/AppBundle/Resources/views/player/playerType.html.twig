@@ -1,0 +1,16 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-8">
+        <h2 class="text-center">Manage player</h2>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success center-block">Save</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block title %}
+    Add a player
+{% endblock %}
+
