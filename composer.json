@@ -30,7 +30,9 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "guzzlehttp/guzzle": "^6.2",
         "friendsofsymfony/user-bundle": "~2.0@dev",
-        "friendsofsymfony/jsrouting-bundle": "^1.6"
+        "friendsofsymfony/jsrouting-bundle": "^1.6",
+        "symfony/dom-crawler": "^3.2",
+        "symfony/css-selector": "^3.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
