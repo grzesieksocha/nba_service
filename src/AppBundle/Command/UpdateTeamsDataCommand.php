@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Command;
 
@@ -9,6 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class UpdateTeamsDataCommand
+ * @package AppBundle\Command
+ */
 class UpdateTeamsDataCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -18,6 +22,12 @@ class UpdateTeamsDataCommand extends ContainerAwareCommand
             ->setHelp('This command uses erikberg.com api to download basic NBA teams data');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([

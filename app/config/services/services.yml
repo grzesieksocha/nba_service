@@ -24,3 +24,6 @@ services:
 
     app.provider.stats:
         class: AppBundle\Service\StatsProvider
+
+    app.helper.file:
+        class: AppBundle\Service\FileHelper
