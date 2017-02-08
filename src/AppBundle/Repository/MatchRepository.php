@@ -2,9 +2,10 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Match;
-
 use Doctrine\ORM\EntityRepository;
+
+use AppBundle\Entity\Match;
+use AppBundle\Exceptions\SaveEntityFailedException;
 
 use \DateTime;
 
@@ -14,6 +15,12 @@ use \DateTime;
  */
 class MatchRepository extends EntityRepository
 {
+    /**
+     * @param $teamsWithScores
+     * @param $date
+     *
+     * @return array
+     */
     public function saveMatchFromCommand($teamsWithScores, $date)
     {
         /** @var TeamRepository $teamsRepo */
@@ -118,6 +125,11 @@ class MatchRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * @param $awayTeamData
+     * @param $homeTeamData
+     * @param $date
+     */
     private function saveMatch($awayTeamData, $homeTeamData, $date) {
         $match = $this->checkIfMatchExist($awayTeamData, $homeTeamData, $date);
         if ($match) {
@@ -127,6 +139,13 @@ class MatchRepository extends EntityRepository
         }
     }
 
+    /**
+     * @param $awayTeamData
+     * @param $homeTeamData
+     * @param $date
+     *
+     * @return Match|bool
+     */
     private function checkIfMatchExist($awayTeamData, $homeTeamData, $date)
     {
         $match = $this->_em->createQueryBuilder()
@@ -147,6 +166,11 @@ class MatchRepository extends EntityRepository
         return false;
     }
 
+    /**
+     * @param $awayTeamData
+     * @param $homeTeamData
+     * @param $date
+     */
     private function createNewMatch($awayTeamData, $homeTeamData, $date)
     {
         $match = new Match();
@@ -157,17 +181,34 @@ class MatchRepository extends EntityRepository
             ->setDate($date)
             ->setIsActive(Match::V_ACTIVE);
 
-        $em = $this->getEntityManager();
-        $em->persist($match);
-        $em->flush();
+        $this->save($match);
     }
 
+    /**
+     * @param Match $match
+     * @param $awayTeamData
+     * @param $homeTeamData
+     */
     private function updateMatchScore(Match $match, $awayTeamData, $homeTeamData) {
         $match->setAwayTeamPoints($awayTeamData['score']);
         $match->setHomeTeamPoints($homeTeamData['score']);
 
-        $em = $this->getEntityManager();
-        $em->persist($match);
-        $em->flush();
+        $this->save($match);
+    }
+
+    /**
+     * @param $match
+     *
+     * @throws SaveEntityFailedException
+     */
+    private function save($match)
+    {
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($match);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw new SaveEntityFailedException($e->getMessage());
+        }
     }
 }

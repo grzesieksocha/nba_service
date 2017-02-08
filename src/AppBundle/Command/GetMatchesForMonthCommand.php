@@ -2,17 +2,19 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Config\Config;
 use AppBundle\Repository\MatchRepository;
 use AppBundle\WebScrapper\DOMCrawler;
-use AppBundle\WebScrapper\FileGetter;
-
 use AppBundle\WebScrapper\UrlGetter;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+
+use \DateTime;
 
 /**
  * Class GetMatchesForMonthCommand
@@ -28,55 +30,57 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
             ->addArgument('month', InputArgument::REQUIRED, 'Month of the matches (01-12)');
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
+     * @throws FileNotFoundException
      *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $dateTimeObject = new DateTime();
+        $dateTimeObject->setDate(2017, (int)$input->getArgument('month'), 1);
+
         $output->writeln([
-            'Updating matches from ' . $input->getArgument('month') . ' in the database...',
+            'Updating matches from ' . $dateTimeObject->format('F') . ' in the database...',
             '---------------------------------',
             ''
         ]);
 
-        $dateTimeObject = new \DateTime();
-        $dateTimeObject->setDate(2017, (int)$input->getArgument('month'), 1);
-        $url = 'http://www.basketball-reference.com/leagues/NBA_2017_games-' . strtolower($dateTimeObject->format('F')) .'.html';
+        $url = Config::BASKETBALL_REFERENCE . Config::MATCHES_MONTH . strtolower($dateTimeObject->format('F')) . Config::HTML;
 
-//        $url = './example_data/matchesData.html';
-
-        $getter = new UrlGetter();
-//        $getter = new FileGetter();
-        $crawler = new Crawler();
-        $domCrawler = new DOMCrawler($this->getContainer(), $getter, $crawler, $url);
-
-        $matchesDataFile = $domCrawler->writeMatchesDataToFile();
+        $matchesDataFile = $this->getDomCrawler($url)->writeMatchesDataToFile();
         $fileWithData = fopen($matchesDataFile, 'r');
-        $arrayWithMatches = [];
+
         if (false === $fileWithData) {
             throw new FileNotFoundException('File with matches data not found');
         } else {
             while (!feof($fileWithData)) {
                 $line = fgets($fileWithData);
                 if(false !== $line && mb_ereg_match('\w{3},\s\w{3}\s\d+', $line)) {
-                    $line = $this->processMatchLineAndSave($line, $dateTimeObject);
+                    $output->writeln('[Processing] ' . $line);
+                    $this->processMatchLineAndSave($line, $dateTimeObject);
                 }
             }
         };
 
-        echo 'DONE!' . PHP_EOL;
+        $output->writeln([
+            '---------------------------------',
+            'ENJOY!'
+        ]);
     }
 
     /**
      * @param string $line
-     * @param \DateTime $date
+     * @param DateTime $date
      *
-     * @return array
+     * @return void
      */
-    private function processMatchLineAndSave(string $line, \DateTime $date) {
+    private function processMatchLineAndSave(string $line, DateTime $date) {
+        /** @noinspection PhpUnusedLocalVariableInspection */
         list($weekDay, $day, $matchDetails) = explode(',' , $line);
         $day = trim($day);
         $matchDetails = trim($matchDetails);
@@ -98,7 +102,19 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
         $matchRepo = $this->getContainer()->get('repository.match');
         $date->setDate((int)$date->format('Y'), (int)$date->format('m'), (int)$day);
         list($hour, $minutes) = explode(':', $time);
-        $date->setTime((int)$hour, (int)$minutes);
+        $date->setTime((int)$hour + 12, (int)$minutes);
         $matchRepo->saveMatchFromCommand($teams, $date);
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return DOMCrawler
+     */
+    private function getDomCrawler(string $url): DOMCrawler
+    {
+        $getter = new UrlGetter();
+        $crawler = new Crawler();
+        return new DOMCrawler($this->getContainer(), $getter, $crawler, $url);
     }
 }
