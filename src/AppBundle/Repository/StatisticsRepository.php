@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\Match;
 use AppBundle\Entity\Player;
 
+use AppBundle\Entity\Statistics;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -25,5 +26,25 @@ class StatisticsRepository extends EntityRepository
             ->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * @param Player $player
+     * @param Match $match
+     *
+     * @return Statistics|null
+     */
+    public function getStats(Player $player, Match $match)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->andWhere('s.match = :match')
+            ->andWhere('s.player = :player')
+            ->setParameters([
+                'match' => $match,
+                'player' => $player
+            ])
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
     }
 }

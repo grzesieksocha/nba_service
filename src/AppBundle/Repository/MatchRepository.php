@@ -97,16 +97,29 @@ class MatchRepository extends EntityRepository
         $tomorrow = clone $date;
         $tomorrow->modify('+1 day');
 
-        $query = $this->_em->createQueryBuilder()
-            ->select('match')
-            ->from(Match::class, 'match')
-            ->andWhere('match.date >= :date')
-            ->andWhere('match.date < :tomorrow')
+        $query = $this->createQueryBuilder('m')
+            ->andWhere('m.date >= :date')
+            ->andWhere('m.date < :tomorrow')
             ->setParameter('date', $date)
             ->setParameter('tomorrow', $tomorrow)
-            ->addOrderBy('match.date', 'ASC');
+            ->addOrderBy('m.date', 'ASC');
 
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param DateTime $date
+     *
+     * @return string[]
+     */
+    public function getMatchesForStatsCommand(DateTime $date)
+    {
+        $matches = $this->getAllMatchesForDate($date);
+        $result = [];
+        foreach ($matches as $match) {
+            $result[] = $match->getHomeTeam()->getShort();
+        }
+        return $result;
     }
 
     /**
@@ -116,10 +129,9 @@ class MatchRepository extends EntityRepository
     {
         $now = new DateTime();
 
-        $query = $this->_em->createQueryBuilder()
-            ->select('match.date')
-            ->from(Match::class, 'match')
-            ->andWhere('match.date > :date')
+        $query = $this->createQueryBuilder('m')
+            ->select('m.date')
+            ->andWhere('m.date > :date')
             ->setParameter('date', $now);
 
         return $query->getQuery()->getResult();

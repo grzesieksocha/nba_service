@@ -6,6 +6,7 @@ use AppBundle\Entity\Pick;
 use AppBundle\Form\PickType;
 use AppBundle\Repository\MatchRepository;
 
+use AppBundle\Repository\PlayerRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -83,6 +84,28 @@ class PickController extends Controller
         $matches = $matchRepo->getAllMatchesForDate(
             $this->getDateToCheck($request->query->keys())
         );
+        $result = [];
+        foreach ($matches as $match) {
+            $result[$match->getId()] =
+                $match->getAwayTeam()->getShort() . ' @ ' . $match->getHomeTeam()->getShort();
+        }
+        return new JsonResponse($result);
+    }
+
+    /**
+     * @Route("/players",
+     *     name="ajax_get_players",
+     *     condition="request.isXmlHttpRequest()",
+     *     options={"expose" = true})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function ajaxGetAvailablePlayersForMatch(Request $request)
+    {
+        /** @var PlayerRepository $playerRepo */
+        $playerRepo = $this->get('repository.player');
+        $availablePlayers = $playerRepo->getAvailablePlayersForMatch();
         $result = [];
         foreach ($matches as $match) {
             $result[$match->getId()] =

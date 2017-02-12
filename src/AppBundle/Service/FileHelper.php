@@ -32,10 +32,10 @@ class FileHelper
     public function createFile(string $filename, string $path = "./example_data/")
     {
         if (null !== $filename) {
+            $this->filename = $path . $filename;
             if (true === file_exists($path . $filename)) {
-                throw new \LogicException('File already exists!');
+                $this->file = fopen($this->filename, 'r');
             } else {
-                $this->filename = $path . $filename;
                 $this->file = fopen($this->filename, 'w');
             }
         }

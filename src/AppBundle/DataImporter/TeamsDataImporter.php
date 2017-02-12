@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\DataImporter;
-
 
 use AppBundle\Exceptions\RateLimitException;
 use GuzzleHttp\Client;
 
+/**
+ * Class TeamsDataImporter
+ * @package AppBundle\DataImporter
+ */
 class TeamsDataImporter
 {
     /**

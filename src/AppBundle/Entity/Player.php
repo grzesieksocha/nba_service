@@ -14,8 +14,8 @@ use \DateTime;
  */
 class Player
 {
-    const V_ACTIVE = 1;
-    const V_DISABLED = 0;
+    const V_ACTIVE = true;
+    const V_DISABLED = false;
 
     /**
      * @ORM\Id
@@ -35,7 +35,7 @@ class Player
     private $lastName;
 
     /**
-     * @ORM\Column(name="short", type="smallint", length=3)
+     * @ORM\Column(name="number", type="smallint", length=3, nullable=true)
      */
     private $number;
 

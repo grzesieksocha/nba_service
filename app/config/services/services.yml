@@ -27,3 +27,11 @@ services:
 
     app.helper.file:
         class: AppBundle\Service\FileHelper
+
+    app.crawler:
+        class: AppBundle\WebScrapper\DOMCrawler
+
+    app.getter.basketball_reference:
+        class: AppBundle\Service\BasketReferenceDataGetter
+        arguments:
+            - '@service_container'

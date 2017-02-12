@@ -15,11 +15,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class LeagueHasUserRepository extends EntityRepository
 {
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
     public function getLeaguesForUser(User $user)
     {
-        $query =  $this->_em->createQueryBuilder()
-            ->select('lhu')
-            ->from('AppBundle:LeagueHasUser', 'lhu')
+        $query =  $this->createQueryBuilder('lhu')
             ->andWhere('lhu.isActive = true');
 
         if (false === $user->hasRole('ROLE_ADMIN')) {

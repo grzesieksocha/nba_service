@@ -30,6 +30,9 @@ class User extends BaseUser
      */
     protected $picks;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();

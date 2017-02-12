@@ -15,8 +15,8 @@ use \DateTime;
  */
 class Statistics
 {
-    const V_ACTIVE = 1;
-    const V_DISABLED = 0;
+    const V_ACTIVE = true;
+    const V_DISABLED = false;
 
     /**
      * @var int
@@ -36,6 +36,11 @@ class Statistics
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Match", inversedBy="statistics")
      */
     private $match;
+
+    /**
+     * @ORM\Column(name="is_starter", type="boolean")
+     */
+    private $isStarter;
 
     /**
      * @ORM\Column(name="points", type="integer")
@@ -68,7 +73,7 @@ class Statistics
     private $turnovers;
 
     /**
-     * @ORM\Column(name="minutes", type="integer")
+     * @ORM\Column(name="minutes", type="string", length=5)
      */
     private $minutes;
 
@@ -81,7 +86,6 @@ class Statistics
      * @ORM\Column(name = "is_active", type = "boolean")
      */
     private $isActive;
-
 
     /**
      * @return int
@@ -125,6 +129,24 @@ class Statistics
     public function setMatch(Match $match)
     {
         $this->match = $match;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsStarter()
+    {
+        return $this->isStarter;
+    }
+
+    /**
+     * @param bool $isStarter
+     * @return Statistics
+     */
+    public function setIsStarter(bool $isStarter)
+    {
+        $this->isStarter = $isStarter;
         return $this;
     }
 
@@ -243,7 +265,7 @@ class Statistics
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getMinutes()
     {
@@ -251,11 +273,11 @@ class Statistics
     }
 
     /**
-     * @param int $minutes
+     * @param string $minutes
      *
      * @return Statistics
      */
-    public function setMinutes(int $minutes)
+    public function setMinutes(string $minutes)
     {
         $this->minutes = $minutes;
         return $this;

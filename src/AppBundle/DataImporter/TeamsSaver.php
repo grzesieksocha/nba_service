@@ -43,7 +43,7 @@ class TeamsSaver
 
             if (null === $teamRepository->findOneBy(['short' => $team['abbreviation']])) {
                 $newTeam = new Team();
-                $newTeam->setShort($team['abbreviation']);
+                $newTeam->setShort($this->fixTeamAbbreviation($team['abbreviation']));
                 $newTeam->setFirstName($team['first_name']);
                 $newTeam->setLastName($team['last_name']);
                 $newTeam->setCity($team['city']);
@@ -65,5 +65,23 @@ class TeamsSaver
             }
         }
         $em->flush();
+    }
+
+    /**
+     * @param string $abbreviation
+     * @return string
+     */
+    private function fixTeamAbbreviation($abbreviation)
+    {
+        switch ($abbreviation) {
+            case 'GS':
+                return 'GSW';
+            case 'NO':
+                return 'NOP';
+            case 'NY':
+                return 'NYK';
+            case 'SA':
+                return 'SAS';
+        }
     }
 }

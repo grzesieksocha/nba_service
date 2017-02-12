@@ -52,7 +52,7 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
 
         $url = Config::BASKETBALL_REFERENCE . Config::MATCHES_MONTH . strtolower($dateTimeObject->format('F')) . Config::HTML;
 
-        $matchesDataFile = $this->getDomCrawler($url)->writeMatchesDataToFile();
+        $matchesDataFile = $this->getDomCrawler($url)->writeMatchesDataToFile('matches' . $dateTimeObject->format('Y_m_d'));
         $fileWithData = fopen($matchesDataFile, 'r');
 
         if (false === $fileWithData) {

@@ -10,5 +10,6 @@ class Config
 {
     const BASKETBALL_REFERENCE = 'http://www.basketball-reference.com/';
     const MATCHES_MONTH = 'leagues/NBA_2017_games-';
+    const BOXSCORES = 'boxscores/';
     const HTML = '.html';
 }

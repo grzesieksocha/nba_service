@@ -14,8 +14,8 @@ use \DateTime;
  */
 class Team
 {
-    const V_ACTIVE = 1;
-    const V_DISABLED = 0;
+    const V_ACTIVE = true;
+    const V_DISABLED = false;
 
     /**
      * @ORM\Id
