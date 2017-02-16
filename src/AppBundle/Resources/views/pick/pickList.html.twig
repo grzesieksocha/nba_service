@@ -1,10 +1,29 @@
 {% extends '@App/base.html.twig' %}
 
 {% block body %}
-
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Match</td>
+                <td>Date</td>
+                <td>Player</td>
+                <td>Points</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pick in picks %}
+            <tr>
+                <td>{{ pick.match.homeTeam }} @ {{ pick.match.awayTeam }}</td>
+                <td>{{ pick.match.date|date('Y-m-d h:i') }}</td>
+                <td>{{ pick.player }}</td>
+                <td>{{ pick.points }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block title %}
-
+    List picks
 {% endblock %}
 

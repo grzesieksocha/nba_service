@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\League;
 use AppBundle\Entity\Pick;
 use AppBundle\Form\PickType;
 use AppBundle\Repository\MatchRepository;
 
 use AppBundle\Repository\PickRepository;
 use AppBundle\Repository\PlayerRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,15 +29,20 @@ use \DateTime;
 class PickController extends Controller
 {
     /**
-    * @Route("{leagueId}/list", name="pick_list")
-    * @Template("AppBundle:pick:pickList.html.twig")
-    */
-    public function listAction()
+     * @Route("/{leagueId}/list", name="pick_list")
+     * @Template("AppBundle:pick:pickList.html.twig")
+     * @ParamConverter("league", options={"id" = "leagueId"})
+     *
+     * @param League $league
+     *
+     * @return array
+     */
+    public function listAction(League $league)
     {
         $em = $this->getDoctrine()->getManager();
-        $matches = $em->getRepository('AppBundle:Match')->findAll();
+        $picks = $em->getRepository('AppBundle:Pick')->findAllByLeagueAndUser($league, $this->getUser());
 
-        return ['matches' => $matches];
+        return ['picks' => $picks];
     }
 
     /**
@@ -129,8 +136,6 @@ class PickController extends Controller
         $ajaxData = $request->query->all();
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-        /** @var PlayerRepository $matchRepo */
-        $matchRepo = $this->get('repository.match');
         /** @var PickRepository $pickRepo */
         $pickRepo = $this->get('repository.pick');
         $match = $em->find('AppBundle:Match', $ajaxData['matchId']);

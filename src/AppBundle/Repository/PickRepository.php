@@ -69,4 +69,22 @@ class PickRepository extends EntityRepository
         }
         return $players;
     }
+
+    /**
+     * @param League $league
+     * @param User $user
+     *
+     * @return Pick[]
+     */
+    public function findAllByLeagueAndUser(League $league, User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.league = :league')
+            ->andWhere('p.user = :user')
+            ->andWhere('p.isActive = 1')
+            ->setParameters([
+                'league' => $league,
+                'user' => $user
+            ])->getQuery()->getResult();
+    }
 }
