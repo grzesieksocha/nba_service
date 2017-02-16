@@ -6,6 +6,7 @@ use AppBundle\Entity\Pick;
 use AppBundle\Form\PickType;
 use AppBundle\Repository\MatchRepository;
 
+use AppBundle\Repository\PickRepository;
 use AppBundle\Repository\PlayerRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -25,6 +26,18 @@ use \DateTime;
  */
 class PickController extends Controller
 {
+    /**
+    * @Route("{leagueId}/list", name="pick_list")
+    * @Template("AppBundle:pick:pickList.html.twig")
+    */
+    public function listAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $matches = $em->getRepository('AppBundle:Match')->findAll();
+
+        return ['matches' => $matches];
+    }
+
     /**
      * @Route("/new", name="pick_new")
      * @Template("@App/pick/pickType.html.twig")
@@ -47,16 +60,24 @@ class PickController extends Controller
     private function processForm(Request $request, Pick $pick = null)
     {
         $form = $this->createForm(PickType::class, $pick, [
-            'match_repository' => $this->getDoctrine()->getRepository('AppBundle:Match')
+            'match_repository' => $this->getDoctrine()->getRepository('AppBundle:Match'),
+            'lhu_repository' => $this->getDoctrine()->getRepository('AppBundle:LeagueHasUser'),
+            'user' => $this->getUser()
         ]);
 
+        $em = $this->getDoctrine()->getManager();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Pick $pick */
-            $pick = $form->getData();
-            $pick->setIsActive(true);
+            $data = $request->request->all();
+            $pick = new Pick();
+            $pick->setUser($this->getUser())
+                ->setLeague($em->getRepository('AppBundle:League')->find($data['pick']['league']))
+                ->setMatch($em->getRepository('AppBundle:Match')->find($data['pick']['match']))
+                ->setPlayer($em->getRepository('AppBundle:Player')->find($data['pick']['player']))
+                ->setPoints(0)
+                ->setIsActive(true);
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($pick);
             $em->flush();
 
@@ -85,6 +106,7 @@ class PickController extends Controller
             $this->getDateToCheck($request->query->keys())
         );
         $result = [];
+        $result[0] = 'Now choose teams...';
         foreach ($matches as $match) {
             $result[$match->getId()] =
                 $match->getAwayTeam()->getShort() . ' @ ' . $match->getHomeTeam()->getShort();
@@ -103,13 +125,21 @@ class PickController extends Controller
      */
     public function ajaxGetAvailablePlayersForMatch(Request $request)
     {
-        /** @var PlayerRepository $playerRepo */
-        $playerRepo = $this->get('repository.player');
-        $availablePlayers = $playerRepo->getAvailablePlayersForMatch();
         $result = [];
-        foreach ($matches as $match) {
-            $result[$match->getId()] =
-                $match->getAwayTeam()->getShort() . ' @ ' . $match->getHomeTeam()->getShort();
+        $ajaxData = $request->query->all();
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        /** @var PlayerRepository $matchRepo */
+        $matchRepo = $this->get('repository.match');
+        /** @var PickRepository $pickRepo */
+        $pickRepo = $this->get('repository.pick');
+        $match = $em->find('AppBundle:Match', $ajaxData['matchId']);
+        $league = $em->find('AppBundle:League', $ajaxData['leagueId']);
+        $players = $match->getAllPlayers();
+        $players = $pickRepo->removeUsedPicks($players, $match, $league, $user);
+        foreach ($players as $player) {
+            $result[$player->getId()] =
+                $player->getFirstName() . ' ' . $player->getLastName();
         }
         return new JsonResponse($result);
     }

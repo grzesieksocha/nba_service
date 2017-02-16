@@ -2,8 +2,11 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\League;
+use AppBundle\Entity\Match;
 use AppBundle\Entity\Player;
 use AppBundle\Entity\Team;
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -31,5 +34,9 @@ class PlayerRepository extends EntityRepository
                 'surname' => $player[1],
                 'team' => $team
             ])->getQuery()->getOneOrNullResult();
+    }
+
+    public function getAvailablePlayers()
+    {
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -44,6 +44,9 @@ class Conference
      */
     private $isActive;
 
+    /**
+     * Conference constructor
+     */
     public function __construct()
     {
         $this->teams = new ArrayCollection();
@@ -57,29 +60,39 @@ class Conference
         return $this->getName();
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
-    public function setName($name)
+    /**
+     * @param string $name
+     *
+     * @return Conference
+     */
+    public function setName(string $name)
     {
         $this->name = $name;
+        return $this;
     }
 
+    /**
+     * @return ArrayCollection|Team[]
+     */
     public function getTeams()
     {
         return $this->teams;
-    }
-
-    public function addTeam($team)
-    {
-        $this->teams->add($team);
     }
 
     public function getLastChangeOn()
@@ -87,9 +100,15 @@ class Conference
         return $this->lastChangeOn;
     }
 
-    public function setLastChangeOn($lastChangeOn)
+    /**
+     * @param $lastChangeOn
+     *
+     * @return Conference
+     */
+    public function setLastChangeOn(DateTime $lastChangeOn)
     {
         $this->lastChangeOn = $lastChangeOn;
+        return $this;
     }
 
     /**

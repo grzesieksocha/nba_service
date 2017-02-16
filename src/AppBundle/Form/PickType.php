@@ -2,11 +2,13 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Player;
+use AppBundle\Entity\User;
+use AppBundle\Repository\LeagueHasUserRepository;
 use AppBundle\Repository\MatchRepository;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,6 +26,30 @@ class PickType extends AbstractType
     {
         /** @var MatchRepository $matchRepo */
         $matchRepo = $options['match_repository'];
+        /** @var LeagueHasUserRepository $lhuRepo */
+        $lhuRepo = $options['lhu_repository'];
+        /** @var User $user */
+        $user = $options['user'];
+        $leagues = $lhuRepo->getLeaguesForUser($user);
+
+        if (count($leagues) === 1) {
+            $builder
+                ->add('league', HiddenType::class, [
+                    'data' => $leagues[0]->getId()
+                ]);
+        } else {
+            $choices = [];
+            foreach ($leagues as $league) {
+                $choices[$league->getName()] = $league->getId();
+            }
+
+            $builder
+                ->add('league', ChoiceType::class, [
+                    'placeholder' => 'Please pick a league',
+                    'label' => 'League',
+                    'choices' => $choices
+                ]);
+        }
 
         $builder
             ->add('date', ChoiceType::class, [
@@ -32,12 +58,10 @@ class PickType extends AbstractType
                 'choices' => $matchRepo->getFormattedDatesForFutureMatches()
             ])
             ->add('match', ChoiceType::class, [
-                'mapped' => false,
                 'placeholder' => 'Choose a date...',
                 'disabled' => true
             ])
             ->add('player', ChoiceType::class, [
-                'mapped' => false,
                 'placeholder' => 'Then choose a match...',
                 'disabled' => true
             ]);
@@ -48,11 +72,9 @@ class PickType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-           'data_class' => Player::class
-        ]);
-
         $resolver->setRequired('match_repository');
+        $resolver->setRequired('lhu_repository');
+        $resolver->setRequired('user');
     }
 
     /**

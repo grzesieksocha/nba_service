@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\League;
 use AppBundle\Entity\LeagueHasUser;
 use AppBundle\Entity\User;
 
@@ -18,7 +19,7 @@ class LeagueHasUserRepository extends EntityRepository
     /**
      * @param User $user
      *
-     * @return array
+     * @return League[]
      */
     public function getLeaguesForUser(User $user)
     {

@@ -70,6 +70,9 @@ class Match
      */
     private $isActive;
 
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->statistics = new ArrayCollection();
@@ -183,6 +186,20 @@ class Match
     public function getStatistics()
     {
         return $this->statistics;
+    }
+
+    /**
+     * @return ArrayCollection|Player[]
+     */
+    public function getAllPlayers()
+    {
+        return new ArrayCollection(
+            array_merge(
+                $this->getHomeTeam()->getPlayers()->toArray(),
+                $this->getAwayTeam()->getPlayers()->toArray()
+            )
+        );
+
     }
 
     /**

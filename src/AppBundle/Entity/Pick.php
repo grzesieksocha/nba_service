@@ -48,8 +48,6 @@ class Pick
     private $match;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="points", type="integer")
      */
     private $points;
