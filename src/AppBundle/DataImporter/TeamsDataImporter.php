@@ -3,6 +3,7 @@
 namespace AppBundle\DataImporter;
 
 use AppBundle\Exceptions\RateLimitException;
+
 use GuzzleHttp\Client;
 
 /**
@@ -21,7 +22,8 @@ class TeamsDataImporter
         ]);
         $response = $client->request('GET', 'nba/teams.json');
         if (200 === $response->getStatusCode()) {
-            $teams = json_decode($response->getBody());
+            $body = $response->getBody()->getContents();
+            $teams = json_decode($body);
             $teamsArray = [];
             foreach ($teams as $team) {
                 $team = get_object_vars($team);

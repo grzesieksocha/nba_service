@@ -82,6 +82,8 @@ class TeamsSaver
                 return 'NYK';
             case 'SA':
                 return 'SAS';
+            default:
+                return $abbreviation;
         }
     }
 }

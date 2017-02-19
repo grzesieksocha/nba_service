@@ -22,11 +22,13 @@ class UpdateTeamsDataCommand extends ContainerAwareCommand
             ->setHelp('This command uses erikberg.com api to download basic NBA teams data');
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return null
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -46,5 +48,4 @@ class UpdateTeamsDataCommand extends ContainerAwareCommand
             $output->writeln($team['first_name'] . ' ' . $team['last_name'] . ' updated');
         }
     }
-
 }

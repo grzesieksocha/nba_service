@@ -1,0 +1,17 @@
+<h2 class="text-center">Daily leaders (date)</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center">Stat</th>
+            <th class="text-center">Player</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for stat in dailyLeaders %}
+        <tr>
+            <td class="text-center">{{ stat.name }}</td>
+            <td class="text-center">{{ stat.player }} ({{ stat.value }})</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

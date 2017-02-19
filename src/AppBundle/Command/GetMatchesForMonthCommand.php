@@ -7,6 +7,7 @@ use AppBundle\Repository\MatchRepository;
 use AppBundle\WebScrapper\DOMCrawler;
 use AppBundle\WebScrapper\UrlGetter;
 
+use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,7 +42,8 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dateTimeObject = new DateTime();
+        $timezone = new DateTimeZone('US/Eastern');
+        $dateTimeObject = new DateTime('now', $timezone);
         $dateTimeObject->setDate(2017, (int)$input->getArgument('month'), 1);
 
         $output->writeln([
@@ -80,6 +82,9 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
      * @return void
      */
     private function processMatchLineAndSave(string $line, DateTime $date) {
+        $timezone = new DateTimeZone('US/Eastern');
+        /** @var MatchRepository $matchRepo */
+        $matchRepo = $this->getContainer()->get('repository.match');
         /** @noinspection PhpUnusedLocalVariableInspection */
         list($weekDay, $day, $matchDetails) = explode(',' , $line);
         $day = trim($day);
@@ -98,12 +103,14 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
             }
         }
 
-        /** @var MatchRepository $matchRepo */
-        $matchRepo = $this->getContainer()->get('repository.match');
-        $date->setDate((int)$date->format('Y'), (int)$date->format('m'), (int)$day);
+        $dateToSet = new DateTime('now', $timezone);
+
+        $dateToSet->setDate((int)$date->format('Y'), (int)$date->format('m'), (int)$day);
         list($hour, $minutes) = explode(':', $time);
-        $date->setTime((int)$hour + 12, (int)$minutes);
-        $matchRepo->saveMatchFromCommand($teams, $date);
+        $dateToSet->setTime((int)$hour + 12, (int)$minutes);
+        $dataBaseTimezone = new DateTimeZone('Europe/London');
+        $dateToSet->setTimezone($dataBaseTimezone);
+        $matchRepo->saveMatchFromCommand($teams, $dateToSet);
     }
 
     /**

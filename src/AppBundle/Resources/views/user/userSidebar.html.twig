@@ -1,5 +1,6 @@
 {% set leagues = active_leagues_provider.getLeaguesForUser() %}
 
+<a href="{{ path('league_add') }}" class="list-group-item">Create a league</a>
 {% if leagues != null %}
     <a href="{{ path('league_list') }}" class="list-group-item">Active leagues</a>
         <ul class="list-group inner">

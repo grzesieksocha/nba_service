@@ -128,6 +128,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
 
         foreach ($teams as $team => $match) {
             $team = $team === 'CHA' ? 'CHO' : $team;
+            $team = $team === 'BKN' ? 'BRK' : $team;
             $url = Config::BASKETBALL_REFERENCE .
                 Config::BOXSCORES .
                 $date->format('Y') . $date->format('m') . $date->format('d') . '0' . $team . Config::HTML;
@@ -166,6 +167,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
                     false === strpos($line, 'Team Totals') &&
                     false === strpos($line, ';Did Not Play;') &&
                     false === strpos($line, ';Not With Team;') &&
+                    false === strpos($line, ';Did Not Dress;') &&
                     $process
                 ) {
                     $processedFile->writeToFile($line);
