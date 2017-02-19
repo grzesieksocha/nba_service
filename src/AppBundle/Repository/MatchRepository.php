@@ -94,14 +94,15 @@ class MatchRepository extends EntityRepository
      */
     public function getAllMatchesForDate(DateTime $date)
     {
-        $tomorrow = clone $date;
-        $tomorrow->modify('+1 day');
+        $date->setTime(0, 0);
+        $endOfDay = clone $date;
+        $endOfDay->setTime(23, 59, 59);
 
         $query = $this->createQueryBuilder('m')
-            ->andWhere('m.date >= :date')
-            ->andWhere('m.date < :tomorrow')
+            ->andWhere('m.date > :date')
+            ->andWhere('m.date <= :tomorrow')
             ->setParameter('date', $date)
-            ->setParameter('tomorrow', $tomorrow)
+            ->setParameter('tomorrow', $endOfDay)
             ->addOrderBy('m.date', 'ASC');
 
         return $query->getQuery()->getResult();

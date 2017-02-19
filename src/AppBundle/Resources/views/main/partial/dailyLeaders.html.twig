@@ -1,17 +1,24 @@
-<h2 class="text-center">Daily leaders (date)</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th class="text-center">Stat</th>
-            <th class="text-center">Player</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for stat in dailyLeaders %}
-        <tr>
-            <td class="text-center">{{ stat.name }}</td>
-            <td class="text-center">{{ stat.player }} ({{ stat.value }})</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<h3 class="text-center">Daily Leaders ({{ yesterday }} EST)</h3>
+{% if dailyLeader is not null %}
+    BEST: {{ dailyLeader.firstName }} {{ dailyLeader.lastName }} - {{ dailyLeader.total }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">Stat</th>
+                <th class="text-center">Player</th>
+                <th class="text-center">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for key, stat in dailyLeaders %}
+            <tr>
+                <td class="text-center">{{ key }}</td>
+                <td class="text-center">{{ stat.player }}</td>
+                <td class="text-center">{{ stat.value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h4 class="text-center">No games yesterday (or no leaders)!</h4>
+{% endif %}

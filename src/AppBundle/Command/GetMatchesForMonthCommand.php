@@ -82,7 +82,9 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
      * @return void
      */
     private function processMatchLineAndSave(string $line, DateTime $date) {
-        $timezone = new DateTimeZone('US/Eastern');
+        $timezone = new DateTimeZone('EST');
+        $dateToSet = new DateTime('now', $timezone);
+
         /** @var MatchRepository $matchRepo */
         $matchRepo = $this->getContainer()->get('repository.match');
         /** @noinspection PhpUnusedLocalVariableInspection */
@@ -103,12 +105,10 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
             }
         }
 
-        $dateToSet = new DateTime('now', $timezone);
-
         $dateToSet->setDate((int)$date->format('Y'), (int)$date->format('m'), (int)$day);
         list($hour, $minutes) = explode(':', $time);
         $dateToSet->setTime((int)$hour + 12, (int)$minutes);
-        $dataBaseTimezone = new DateTimeZone('Europe/London');
+        $dataBaseTimezone = new DateTimeZone('UTC');
         $dateToSet->setTimezone($dataBaseTimezone);
         $matchRepo->saveMatchFromCommand($teams, $dateToSet);
     }

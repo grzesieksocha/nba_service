@@ -1,38 +1,46 @@
-<h2 class="text-center">Games (today)</h2>
-<table class="table">
-    <thead>
-    <tr>
-        <th class="text-center">Time</th>
-        <th class="text-center">Match</th>
-        <th class="text-center">Score</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for match in todayMatches %}
-        <tr>
-            <td class="text-center">{{ match.time }}</td>
-            <td class="text-center">{{ match.awayTeam }} @ {{ match.homeTeam }}</td>
-            <td class="text-center">{{ match.awayTeamPoints }} : {{ match.awayTeamPoints }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<h2 class="text-center">Games (tomorrow)</h2>
-<table class="table">
-    <thead>
-    <tr>
-        <th class="text-center">Time</th>
-        <th class="text-center">Match</th>
-        <th class="text-center">Score</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for match in tommorowMatches %}
-        <tr>
-            <td class="text-center">{{ match.time }}</td>
-            <td class="text-center">{{ match.awayTeam }} @ {{ match.homeTeam }}</td>
-            <td class="text-center">{{ match.awayTeamPoints }} : {{ match.awayTeamPoints }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<h3 class="text-center">Games ({{ today }} EST)</h3>
+{% if matchesToday %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">Time</th>
+                <th class="text-center">Match</th>
+                <th class="text-center">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in matchesToday %}
+                <tr>
+                    <td class="text-center">{{ match.date|date('G:i a') }}</td>
+                    <td class="text-center">{{ match.awayTeam.short }} @ {{ match.homeTeam.short }}</td>
+                    <td class="text-center">{{ match.awayTeamPoints }} : {{ match.homeTeamPoints }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h4 class="text-center">No games today!</h4>
+{% endif %}
+<h3 class="text-center">Games ({{ tommorow }} EST)</h3>
+{% if matchesToday %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">Time</th>
+                <th class="text-center">Match</th>
+                <th class="text-center">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in matchesTommorow %}
+                <tr>
+                    <td class="text-center">{{ match.date|date('G:i a') }}</td>
+                    <td class="text-center">{{ match.awayTeam.short }} @ {{ match.homeTeam.short }}</td>
+                    <td class="text-center">{{ match.awayTeamPoints }} : {{ match.homeTeamPoints }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h4 class="text-center">No games tommorow!</h4>
+{% endif %}

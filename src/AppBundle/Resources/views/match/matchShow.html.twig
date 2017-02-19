@@ -30,7 +30,7 @@
                 <tbody>
                 {% for player in team.players %}
                     <tr>
-                        <td>{{ player.number }}</td>
+                        <td>{{ loop.index }}</td>
                         <td>{{ player }}</td>
                     {% if stats[player.id] is defined %}
                         {% set personalStats = stats[player.id] %}
