@@ -31,6 +31,9 @@ class LeagueType extends AbstractType
                 'Yes' => true,
                 'No' => false
             ],
+            'choice_attr' => function() {
+                return ['class' => 'private-checkbox'];
+            },
             'expanded' => true,
             'multiple' => false,
             'data' => false

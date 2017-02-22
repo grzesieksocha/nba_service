@@ -37,9 +37,6 @@
         <tr>
             <td colspan="3" class="form-inline text-center">
                 {{ form_row(form.date) }}
-                {#{{ form_label(form.date, 'Date (ET)', {'label_attr': {'class': 'col-form-label'}}) }}#}
-                {#{{ form_errors(form.date) }}#}
-                {#{{ form_widget(form.date, {'attr': {'class': ''}}) }}#}
             </td>
         </tr>
         </tbody>
@@ -80,6 +77,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/matchType.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}">
 {% endblock %}

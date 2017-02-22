@@ -3,12 +3,65 @@
 {% block title %}NBA Play-Off{% endblock %}
 
 {% block body %}
+    {{ form_start(form) }}
     <div class="col-md-8">
-        <h2 class="text-center">Add a new league</h2>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
+        <h2 class="text-center title">Create a new league</h2>
+        <h4 class="set-up">Basic set up</h4>
+        <table class="table">
+            <tr>
+                <td class="form-inline text-center">
+                    {{ form_label(form.name) }}
+                </td>
+                <td>
+                    {{ form_errors(form.name) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-inline text-center">
+                    {{ form_label(form.description) }}
+                </td>
+                <td>
+                    {{ form_errors(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-inline text-center">
+                    {{ form_label(form.isPrivate) }}
+                </td>
+                <td>
+                    {{ form_errors(form.isPrivate) }}
+                    {{ form_widget(form.isPrivate) }}
+                    <span id="ask-for-passwd" style="display: none;">Please enter a password</span>
+                </td>
+            </tr>
+            <tr id="password-row" style="display: none;">
+                <td class="form-inline text-center">
+                    {{ form_label(form.password) }}
+                </td>
+                <td>
+                    {{ form_errors(form.password) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                </td>
+            </tr>
+        </table>
+
+        <h4>Additional set up<span class="btn btn-danger additional-options">Show options</h4>
+
         <button type="submit" class="btn btn-success center-block">Save</button>
         {{ form_end(form) }}
         <span>@future - invite players</span>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/leagueType.js') }}"></script>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
 {% endblock %}
