@@ -13,6 +13,10 @@ body {
     padding-top: 20px;
 }
 
+.table-bordered {
+    border-width: 3px;
+}
+
 .top-box {
     height: 75px;
 }
@@ -61,4 +65,8 @@ body {
 
 .leader {
     padding: 10px 0;
+}
+
+.statPadding {
+    padding-top: 15px;
 }

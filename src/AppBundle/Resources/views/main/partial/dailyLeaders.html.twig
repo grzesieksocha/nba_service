@@ -1,7 +1,11 @@
+<h2 class="bg-success text-center leader">
+    {{ dailyLeader.firstName }} {{ dailyLeader.lastName }} - {{ dailyLeader.total }} pts
+</h2>
+<h5 class="text-right">(pts + reb + ast)</h5>
+
 <h3 class="text-center">Daily Leaders ({{ yesterday }} EST)</h3>
 {% if dailyLeader is not null %}
-    <h4 class="bg-success text-center leader">Daily leader (pts + reb + ast) <br><br> {{ dailyLeader.firstName }} {{ dailyLeader.lastName }} - {{ dailyLeader.total }} pts</h4>
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th class="text-center">Stat</th>
@@ -10,12 +14,28 @@
             </tr>
         </thead>
         <tbody>
-        {% for key, stat in dailyLeaders %}
-            <tr>
-                <td class="text-center">{{ key }}</td>
-                <td class="text-center">{{ stat.player }}</td>
-                <td class="text-center">{{ stat.value }}</td>
-            </tr>
+        {% for statName, data in dailyLeaders %}
+            {% set appearance = true %}
+            {% for id, details in data %}
+                <tr>
+                    {% if appearance %}
+                        <td rowspan="{{ data|length }}" class="text-center">
+                            <p {% if data|length > 1 %}class="statPadding"{% endif %}>
+                                {{ statName|capitalize }}
+                            </p>
+                        </td>
+                    {% endif %}
+                    <td class="text-center">{{ details.player }}</td>
+                    {% if appearance %}
+                        <td rowspan="{{ data|length }}" class="text-center">
+                            <p {% if data|length > 1 %}class="statPadding"{% endif %}>
+                                {{ details.value }}
+                            </p>
+                        </td>
+                        {% set appearance = false %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
         {% endfor %}
         </tbody>
     </table>
