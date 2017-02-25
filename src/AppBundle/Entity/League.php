@@ -52,7 +52,12 @@ class League
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pick", mappedBy="league")
      */
-    protected $picks;
+    private $picks;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\LeagueOptions", mappedBy="league")
+     */
+    private $options;
 
     /**
      * @ORM\Column(name="last_change_on", type="datetime")

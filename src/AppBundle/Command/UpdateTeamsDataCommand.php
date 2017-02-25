@@ -17,7 +17,7 @@ class UpdateTeamsDataCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('app:update:teams')
+        $this->setName('get:teams')
             ->setDescription('Update teams data in the database.')
             ->setHelp('This command uses erikberg.com api to download basic NBA teams data');
     }

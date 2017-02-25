@@ -25,7 +25,7 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('app:get:matches')
+        $this->setName('get:matches')
             ->setDescription('Get matches (with scores if available) for given month and upload to the database.')
             ->setHelp('Scrap matches from the http://www.basketball-reference.com/leagues/ site')
             ->addArgument('month', InputArgument::REQUIRED, 'Month of the matches (01-12)');
@@ -42,7 +42,7 @@ class GetMatchesForMonthCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $timezone = new DateTimeZone('US/Eastern');
+        $timezone = new DateTimeZone('EST');
         $dateTimeObject = new DateTime('now', $timezone);
         $dateTimeObject->setDate(2017, (int)$input->getArgument('month'), 1);
 

@@ -15,6 +15,7 @@ use AppBundle\Service\FileHelper;
 use AppBundle\WebScrapper\DOMCrawler;
 use AppBundle\WebScrapper\UrlGetter;
 
+use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +40,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setName('app:get:scores')
+        $this->setName('get:scores')
             ->setDescription('Get scores from given date and upload to the database.')
             ->setHelp('Scrap scores from the')
             ->addArgument('date', InputArgument::REQUIRED, 'Date of the matches (YYYY/MM/DD');
@@ -65,7 +66,8 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
         ]);
 
         $date = explode('/', $input->getArgument('date'));
-        $dateTime = new DateTime();
+        $timezone = new DateTimeZone('EST');
+        $dateTime = new DateTime('now', $timezone);
         $dateTime->setDate((int)$date[0], (int)$date[1], (int)$date[2]);
         $dateTime->setTime(0, 0);
         $urls = $this->buildUrlMatchArray($dateTime);
@@ -74,12 +76,13 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
             $filename = 'stats_' . $match->getAwayTeam()->getShort() . '_' . $match->getHomeTeam()->getShort();
             $processedFilename = $this->getDomCrawler($url)->writeStatsDataToFile($filename);
             $matchesDataFiles[$processedFilename] = $match;
-            $output->writeln('Processed ' . $match->getAwayTeam()->getShort() . '_' . $match->getHomeTeam()->getShort() . ' & waiting...');
+            $output->writeln('Saved stats for ' . $match->getAwayTeam()->getShort() . '_' . $match->getHomeTeam()->getShort() . ' & waiting...');
             sleep(rand(30, 90));
-            $output->writeln('Processing...');
+            $output->writeln('Saving stats...');
         }
 
         foreach ($matchesDataFiles as $matchesDataFile => $match) {
+            $output->writeln('Processing match...');
             $fileWithDataName = $this->prepareFile($matchesDataFile, $match);
             $fileWithData = fopen($fileWithDataName, 'r');
 
@@ -210,6 +213,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
      */
     private function processStatLineAndSave(string $line, bool $starter, Team $team, Match $match)
     {
+        /** @noinspection PhpUnusedLocalVariableInspection */
         list($player, $minutesPlayed, $fieldGoals, $fieldGoalAttempts, $fieldGoalPercentage,
             $threePoint, $threePointAttempts, $threePointPercentage, $freeThrows, $freeThrowsAttempts,
             $freeThrowsPercentage, $offensiveRebounds, $defensiveRebounds, $totalRebounds, $assists,

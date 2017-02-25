@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Helpers\DateHelper;
+use DateTimeZone;
 use Doctrine\ORM\EntityRepository;
 
 use AppBundle\Entity\Match;
@@ -94,14 +96,12 @@ class MatchRepository extends EntityRepository
      */
     public function getAllMatchesForDate(DateTime $date)
     {
-        $date->setTime(0, 0);
-        $endOfDay = clone $date;
-        $endOfDay->setTime(23, 59, 59);
+        list($startOfDay, $endOfDay) = DateHelper::getTodayBordersFromEstToCet($date);
 
         $query = $this->createQueryBuilder('m')
             ->andWhere('m.date > :date')
             ->andWhere('m.date <= :tomorrow')
-            ->setParameter('date', $date)
+            ->setParameter('date', $startOfDay)
             ->setParameter('tomorrow', $endOfDay)
             ->addOrderBy('m.date', 'ASC');
 

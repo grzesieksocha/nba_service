@@ -34,6 +34,18 @@ class LeagueController extends Controller
     }
 
     /**
+     * @Route("/join", name="league_join")
+     * @Template("@App/league/leagueJoin.html.twig")
+     */
+    public function joinAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $leagues = $em->getRepository('AppBundle:League')->findBy(['isActive' => League::V_ACTIVE]);
+
+        return ['leagues' => $leagues];
+    }
+
+    /**
      * @Route("/add", name="league_add")
      * @Template("@App/league/leagueType.html.twig")
      *

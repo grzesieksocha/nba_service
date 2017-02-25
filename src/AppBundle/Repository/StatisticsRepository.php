@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Helpers\DateHelper;
+use DateTimeZone;
 use Doctrine\ORM\EntityRepository;
 
 use AppBundle\Entity\Match;
@@ -64,20 +66,26 @@ class StatisticsRepository extends EntityRepository
         if (false === property_exists(Statistics::class, $statistic)) {
             throw new Exception(ucfirst($statistic) . ' not found in Statistic class.');
         }
-        $date->setTime(0, 0);
-        $endOfDay = clone $date;
-        $endOfDay->setTime(23, 59, 59);
 
-        return $this->createQueryBuilder('s')
+        list($startOfDay, $endOfDay) = DateHelper::getTodayBordersFromEstToCet($date);
+
+//        $date->setTime(0, 0);
+//        $endOfDay = clone $date;
+//        $endOfDay->setTime(23, 59, 59);
+
+        $query = $this->createQueryBuilder('s')
             ->leftJoin('s.match', 'm')
             ->andWhere('m.date > :date')
             ->andWhere('m.date <= :tomorrow')
-            ->setParameter('date', $date)
+            ->setParameter('date', $startOfDay)
             ->setParameter('tomorrow', $endOfDay)
             ->addOrderBy('s.' . $statistic, 'DESC')
             ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->getQuery();
+
+        $sqlq = $query->getSQL();
+
+        return $query->getOneOrNullResult();
     }
 
     /**
@@ -86,9 +94,17 @@ class StatisticsRepository extends EntityRepository
      */
     public function getDailyLeaderSum(DateTime $date)
     {
+        $timezone = new DateTimeZone('CET');
         $date->setTime(0, 0);
         $endOfDay = clone $date;
         $endOfDay->setTime(23, 59, 59);
+
+        $date->setTimezone($timezone);
+        $endOfDay->setTimezone($timezone);
+
+//        $date->setTime(0, 0);
+//        $endOfDay = clone $date;
+//        $endOfDay->setTime(23, 59, 59);
 
         return $this->createQueryBuilder('s')
             ->select('p.firstName, p.lastName, s.points + s.rebounds + s.assists AS total')

@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use AppBundle\Repository\MatchRepository;
 use AppBundle\Repository\StatisticsRepository;
 use DateTime;
+use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -27,7 +28,8 @@ class MainController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $now = new DateTime();
+        $timezone = new DateTimeZone('EST');
+        $now = new DateTime('now', $timezone);
         $tommorow = clone $now;
         $tommorow->modify('+1 day');
         $yesterday = clone $now;
@@ -45,7 +47,8 @@ class MainController extends Controller
         $statsRepo = $this->get('repository.statistics');
         $dailyLeaders = [];
         foreach ($this->getStatisticsArray() as $stat) {
-            $statsEntity = $statsRepo->getDailyLeaderInStat($yesterday, $stat);
+            $checkDate = clone $yesterday;
+            $statsEntity = $statsRepo->getDailyLeaderInStat($checkDate, $stat);
             if (null !== $statsEntity) {
                 $dailyLeaders[$stat]['player'] =
                     $statsEntity->getPlayer()->getFirstName() . ' ' . $statsEntity->getPlayer()->getLastName();

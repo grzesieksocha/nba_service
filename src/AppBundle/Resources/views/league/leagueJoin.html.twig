@@ -1,0 +1,15 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <table class="table table-bordered">
+        <thead>
+
+        </thead>
+        <tbody>
+            {% for league in leagues %}
+                {# var league \AppBundle\Entity\League #}
+                {{ league.name }}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
