@@ -1,0 +1,33 @@
+.at {
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.date-row {
+    margin-top: 20px;
+}
+
+.checkbox-row {
+    margin-top: 10px;
+}
+
+.date-pick {
+    margin-bottom: 20px;
+}
+
+.dateWidget {
+    padding-top: 5px;
+}
+
+.checkboxes-div-margin {
+    margin-left: 14px;
+    margin-top: 10px;
+}
+
+.show-matches {
+    margin-top: 10px;
+}
+
+#table-list-matches {
+    margin-top: 25px;
+}

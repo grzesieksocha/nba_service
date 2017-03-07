@@ -2,13 +2,13 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Helpers\DateHelper;
-use DateTimeZone;
 use Doctrine\ORM\EntityRepository;
 
+use AppBundle\Helpers\DateHelper;
 use AppBundle\Entity\Match;
 use AppBundle\Exceptions\SaveEntityFailedException;
 
+use \DateInterval;
 use \DateTime;
 
 /**
@@ -90,13 +90,20 @@ class MatchRepository extends EntityRepository
     }
 
     /**
+     * Getting all the matches from a given day.
+     * If timezone of $date is different than CET then converts it to CET
+     *
      * @param DateTime $date
      *
      * @return Match[]
      */
     public function getAllMatchesForDate(DateTime $date)
     {
-        list($startOfDay, $endOfDay) = DateHelper::getTodayBordersFromEstToCet($date);
+        if ($date->getTimezone()->getName() !== 'UTC') {
+            list($startOfDay, $endOfDay) = DateHelper::getTodayBordersFromEstToCet($date);
+        } else {
+            list($startOfDay, $endOfDay) = DateHelper::getTodayBorders($date);
+        }
 
         $query = $this->createQueryBuilder('m')
             ->andWhere('m.date > :date')
@@ -223,5 +230,23 @@ class MatchRepository extends EntityRepository
         } catch (\Exception $e) {
             throw new SaveEntityFailedException($e->getMessage());
         }
+    }
+
+    /**
+     * @param DateTime $dateFrom
+     * @param DateTime $dateTo
+     *
+     * @return Match[]
+     */
+    public function getAllMatchesForDateRange(DateTime $dateFrom, DateTime $dateTo)
+    {
+        $dateFrom->modify('-1 day');
+        $matches = [];
+        $interval = new DateInterval('P1D');
+        while ($dateFrom->add($interval) <= $dateTo) {
+            $games = $this->getAllMatchesForDate(clone $dateFrom);
+            $matches = array_merge($matches, $games);
+        }
+        return $matches;
     }
 }

@@ -28,14 +28,6 @@ class MainController extends Controller
     private $statsRepository;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        var_dump($this->container);
-    }
-
-    /**
      * @Route("/", name="homepage")
      * @Template("@App/Main/main.html.twig")
      *
@@ -50,10 +42,10 @@ class MainController extends Controller
 
         list($now, $tommorow, $yesterday) = $this->getDates();
 
-        $dailyLeaders = $this->getDailyLeaders($yesterday);
-        $dailyLeader = $this->statsRepository->getDailyLeaderSum($yesterday);
-        $matchesToday = $this->matchRepository->getAllMatchesForDate($now);
-        $matchesTommorow = $this->matchRepository->getAllMatchesForDate($tommorow);
+        $dailyLeaders = $this->getDailyLeaders(clone $yesterday);
+        $dailyLeader = $this->statsRepository->getDailyLeaderSum(clone $yesterday);
+        $matchesToday = $this->matchRepository->getAllMatchesForDate(clone $now);
+        $matchesYesterday = $this->matchRepository->getAllMatchesForDate(clone $yesterday);
 
         return [
             'last_username' => $this->getLastUsername($request),
@@ -61,7 +53,7 @@ class MainController extends Controller
             'dailyLeaders' => $dailyLeaders,
             'dailyLeader' => $dailyLeader,
             'matchesToday' => $matchesToday,
-            'matchesTommorow' => $matchesTommorow,
+            'matchesYesterday' => $matchesYesterday,
             'today' => $now->format('j F'),
             'tommorow' => $tommorow->format('j F'),
             'yesterday' => $yesterday->format('j F')

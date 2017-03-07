@@ -4,18 +4,77 @@
 
 {% block body %}
     <div class="row">
-        <h2 class="section-title">Matches management</h2>
-    <a class="btn btn-success" href="{{ path('match_list') }}">Show list</a>
-    <a class="btn btn-success" href="{{ path('match_add') }}">Add match</a>
-    {% if matches %}
-        <h3>All matches:</h3>
-        <ol>
-        {% for match in matches %}
-            <li><a href="{{ path('match_show', {'id': match.id}) }}">{{ match.date|date('d-M G:i A') }} - ({{ match.awayTeamPoints }} : {{ match.homeTeamPoints }}) {{ match.awayTeam }} @ {{ match.homeTeam }}</a></li>
-        {% endfor %}
-        </ol>
-    {% else %}
-        You do not have any matches in App :O!
-    {% endif %}
+        <h2>Matches</h2>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-success" href="{{ path('match_add') }}">Add match</a>
+        {% endif %}
+
+        <h3>Provide matches dates (EST days)</h3>
+        <div class="row date-row">
+            <div class="date-pick">
+                <label for="dateFromWidget" class="dateWidget col-md-1">From: </label>
+                <div class='dateFrom input-group date col-md-3'>
+                    <input type='text' class="form-control" id="dateFromWidget"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label for="dateToWidget" class="dateWidget col-md-1">To: </label>
+                <div class='dateTo input-group date col-md-3'>
+                    <input type='text' class="form-control" id="dateToWidget"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row checkbox-row">
+            <div class="checkboxes-div-margin">
+                <strong>Date format:</strong>
+                <div class="radio">
+                    <label><input type="radio" name="time" checked="checked" value="local">Local timezone</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="time" value="est">EST timezone</label>
+                </div>
+            </div>
+        </div>
+        <a id="submit-dates" class="btn btn-success show-matches" href="{{ path('match_list') }}">Show</a>
+
+        <div id="table-list-matches">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Actions</th>
+                        <th>Date</th>
+                        <th>Away Team</th>
+                        <th>Points</th>
+                        <th><p class="at">@</p></th>
+                        <th>Home Team</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody id="match-list-table">
+                </tbody>
+            </table>
+        </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript" src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/matches.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ asset('js/fos_js_routes.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/tables.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}">
 {% endblock %}

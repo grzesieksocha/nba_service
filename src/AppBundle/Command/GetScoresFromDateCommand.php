@@ -43,7 +43,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
         $this->setName('get:scores')
             ->setDescription('Get scores from given date and upload to the database.')
             ->setHelp('Scrap scores from the')
-            ->addArgument('date', InputArgument::REQUIRED, 'Date of the matches (YYYY/MM/DD');
+            ->addArgument('date', InputArgument::REQUIRED, 'Date of the matches (YYYY/MM/DD)');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -89,7 +89,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
             if (false === $fileWithData) {
                 throw new FileNotFoundException('File with stats data not found');
             } else {
-                $this->processStatFile($fileWithData, $match);
+                $this->processStatFile($fileWithData, $match, $output);
             };
             $output->writeln('Match processed');
         }
@@ -171,6 +171,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
                     false === strpos($line, ';Did Not Play;') &&
                     false === strpos($line, ';Not With Team;') &&
                     false === strpos($line, ';Did Not Dress;') &&
+                    false === strpos($line, ';Player Suspended;') &&
                     $process
                 ) {
                     $processedFile->writeToFile($line);
@@ -183,8 +184,9 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
     /**
      * @param resource $fileWithData
      * @param Match $match
+     * @param OutputInterface $output
      */
-    private function processStatFile($fileWithData, $match)
+    private function processStatFile($fileWithData, $match, OutputInterface $output)
     {
         $team = $match->getAwayTeam();
         $changeTeam = false;
@@ -196,6 +198,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
                     $starter = false;
                 } elseif (0 === preg_match('/^[A-Z]{3}\n$/', $line)) {
                     $this->processStatLineAndSave($line, $starter, $team, $match);
+                    $output->writeln('Processed line: ' . $line . ' from ' . $match->getAwayTeam() . ' @ ' . $match->getHomeTeam());
                     $changeTeam = true;
                 } elseif ($changeTeam) {
                     $team = $match->getHomeTeam();

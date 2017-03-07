@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -89,6 +89,9 @@ class Team
      */
     private $isActive;
 
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -101,6 +104,14 @@ class Team
      */
     public function __toString()
     {
+     return $this->getFullName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
      return ucwords($this->getFirstName() . ' ' . $this->getLastName());
     }
 
@@ -112,9 +123,14 @@ class Team
         return $this->id;
     }
 
-    public function setShort($short)
+    /**
+     * @param string $short
+     * @return Team
+     */
+    public function setShort(string $short)
     {
         $this->short = $short;
+        return $this;
     }
 
     /**
@@ -125,84 +141,148 @@ class Team
         return $this->short;
     }
 
+    /**
+     * @param DateTime $lastChangeOn
+     * @return Team
+     */
     public function setLastChangeOn($lastChangeOn)
     {
         $this->lastChangeOn = $lastChangeOn;
+        return $this;
     }
 
+    /**
+     * @return DateTime
+     */
     public function getLastChangeOn()
     {
         return $this->lastChangeOn;
     }
 
-    public function setDivision($division)
+    /**
+     * @param string $division
+     * @return Team
+     */
+    public function setDivision(string $division)
     {
         $this->division = $division;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getDivision()
     {
         return $this->division;
     }
 
-    public function setConference($conference)
+    /**
+     * @param string $conference
+     * @return Team
+     */
+    public function setConference(string $conference)
     {
         $this->conference = $conference;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getConference()
     {
         return $this->conference;
     }
 
+    /**
+     * @return string
+     */
     public function getFirstName()
     {
         return $this->firstName;
     }
 
-    public function setFirstName($firstName)
+    /**
+     * @param string $firstName
+     * @return Team
+     */
+    public function setFirstName(string $firstName)
     {
         $this->firstName = $firstName;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getLastName()
     {
         return $this->lastName;
     }
 
-    public function setLastName($lastName)
+    /**
+     * @param string $lastName
+     * @return Team
+     */
+    public function setLastName(string $lastName)
     {
         $this->lastName = $lastName;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getSiteName()
     {
         return $this->siteName;
     }
 
-    public function setSiteName($siteName)
+    /**
+     * @param string $siteName
+     * @return Team
+     */
+    public function setSiteName(string $siteName)
     {
         $this->siteName = $siteName;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getCity()
     {
         return $this->city;
     }
 
-    public function setCity($city)
+    /**
+     * @param string $city
+     * @return Team
+     */
+    public function setCity(string $city)
     {
         $this->city = $city;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getState()
     {
         return $this->state;
     }
 
-    public function setState($state)
+    /**
+     * @param string $state
+     * @return Team
+     */
+    public function setState(string $state)
     {
         $this->state = $state;
+        return $this;
     }
 
     /**

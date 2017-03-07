@@ -4,14 +4,16 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Match;
 use AppBundle\Entity\Statistics;
-use AppBundle\Entity\Team;
 use AppBundle\Form\MatchType;
 
-use AppBundle\Repository\StatisticsRepository;
+use AppBundle\Repository\MatchRepository;
+use DateTime;
+use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -111,5 +113,49 @@ class MatchController extends Controller
         }
 
         return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Route("/data",
+     *     name="ajax_get_matches_for_list",
+     *     condition="request.isXmlHttpRequest()",
+     *     options={"expose" = true})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function ajaxGetMatchesForList(Request $request)
+    {
+        $result = [];
+        $data = $request->query->all();
+        $timezone = new DateTimeZone('EST');
+        $dateFrom = new DateTime($data['dateFrom'], $timezone);
+        $dateTo = new DateTime($data['dateTo'], $timezone);
+
+        /** @var MatchRepository $matchRepo */
+        $matchRepo = $this->get('repository.match');
+        $matches = $matchRepo->getAllMatchesForDateRange($dateFrom, $dateTo);
+        $index = 1;
+        foreach ($matches as $match) {
+            $result[$index] = $this->getMatchProperties($match);
+            $index++;
+        }
+        return new JsonResponse($result);
+    }
+
+    /**
+     * @param Match $match
+     *
+     * @return string[]
+     */
+    private function getMatchProperties(Match $match)
+    {
+        $result['id'] = $match->getHomeTeam()->getId();
+        $result['homeTeam'] = $match->getHomeTeam()->getFullName();
+        $result['awayTeam'] = $match->getAwayTeam()->getFullName();
+        $result['homeTeamPoints'] = $match->getHomeTeamPoints();
+        $result['awayTeamPoints'] = $match->getHomeTeamPoints();
+        $result['date'] = $match->getDate()->format('d/m H:i');
+        return $result;
     }
 }
