@@ -44,6 +44,7 @@ class LeagueType extends AbstractType
                 'display' => 'none'
             ]
         ]);
+        $builder->add('options', LeagueOptionsType::class);
     }
 
     /**

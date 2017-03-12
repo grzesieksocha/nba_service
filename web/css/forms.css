@@ -40,9 +40,21 @@
 }
 
 .additional-options {
-    margin-left: 20px;
+    margin-left: 37px;
+}
+
+.additional-text-label {
+    margin-top: 5px;
+}
+
+.additional-text {
+    width: 50px;
 }
 
 .set-up {
     margin-bottom: 30px;
+}
+
+.save-button {
+    margin-left: 25px;
 }

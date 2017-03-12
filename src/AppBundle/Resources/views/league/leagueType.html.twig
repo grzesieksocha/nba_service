@@ -4,55 +4,110 @@
 
 {% block body %}
     {{ form_start(form) }}
-    <div class="col-md-8">
-        <h2 class="text-center title">Create a new league</h2>
-        <h4 class="set-up">Basic set up</h4>
-        <table class="table">
-            <tr>
-                <td class="form-inline text-center">
-                    {{ form_label(form.name) }}
-                </td>
-                <td>
-                    {{ form_errors(form.name) }}
-                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                </td>
-            </tr>
-            <tr>
-                <td class="form-inline text-center">
-                    {{ form_label(form.description) }}
-                </td>
-                <td>
-                    {{ form_errors(form.description) }}
-                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                </td>
-            </tr>
-            <tr>
-                <td class="form-inline text-center">
-                    {{ form_label(form.isPrivate) }}
-                </td>
-                <td>
-                    {{ form_errors(form.isPrivate) }}
-                    {{ form_widget(form.isPrivate) }}
-                    <span id="ask-for-passwd" style="display: none;">Please enter a password</span>
-                </td>
-            </tr>
-            <tr id="password-row" style="display: none;">
-                <td class="form-inline text-center">
-                    {{ form_label(form.password) }}
-                </td>
-                <td>
-                    {{ form_errors(form.password) }}
-                    {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
-                </td>
-            </tr>
-        </table>
-
-        <h4>Additional set up (optional) <span class="btn btn-danger additional-options">Show options</h4>
-
-        <button type="submit" class="btn btn-success center-block">Save</button>
-        {{ form_end(form) }}
-        <span>@future - invite players</span>
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="text-center title">Create a new league</h2>
+            <h4 class="set-up">Basic set up</h4>
+            <table class="table">
+                <tr>
+                    <td class="form-inline text-center">
+                        {{ form_label(form.name) }}
+                    </td>
+                    <td>
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="form-inline text-center">
+                        {{ form_label(form.description) }}
+                    </td>
+                    <td>
+                        {{ form_errors(form.description) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="form-inline text-center">
+                        {{ form_label(form.isPrivate) }}
+                    </td>
+                    <td>
+                        {{ form_errors(form.isPrivate) }}
+                        {{ form_widget(form.isPrivate) }}
+                        <span id="ask-for-passwd" style="display: none;">Please enter a password</span>
+                    </td>
+                </tr>
+                <tr id="password-row" style="display: none;">
+                    <td class="form-inline text-center">
+                        {{ form_label(form.password) }}
+                    </td>
+                    <td>
+                        {{ form_errors(form.password) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Additional set up (optional) <span class="btn btn-danger additional-options">Show options</span></h4>
+        </div>
+    </div>
+    <div class="row">
+        <div id="additional-options-div" class="col-md-offset-1 col-md-5" style="display: none">
+            <div class="checkbox">
+                <label>{{ form_widget(form.options.doCountPoints)}}Count player points</label>
+            </div>
+            <div class="checkbox">
+                <label>{{ form_widget(form.options.doCountRebounds)}}Count player rebounds</label>
+            </div>
+            <div class="checkbox">
+                <label>{{ form_widget(form.options.doCountAssists)}}Count player assists</label>
+            </div>
+            <div class="checkbox">
+                <label>{{ form_widget(form.options.doCountBlocks)}}Count player blocks</label>
+            </div>
+            <div class="checkbox">
+                <label>{{ form_widget(form.options.doCountSteals)}}Count player steals</label>
+            </div>
+            <table class="table col-md-4">
+                <tr>
+                    <td>
+                        {{ form_errors(form.options.firstRoundMultiplier) }}
+                        {{ form_widget(form.options.firstRoundMultiplier, {'attr': {'class': 'form-control additional-text'}}) }}
+                    </td>
+                    <td>
+                        <p class="additional-text-label">First round points multiplier</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form_errors(form.options.secondRoundMultiplier) }}
+                        {{ form_widget(form.options.secondRoundMultiplier, {'attr': {'class': 'form-control additional-text'}}) }}
+                    </td>
+                    <td>
+                        <p class="additional-text-label">Second round points multiplier</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form_errors(form.options.thirdRoundMultiplier) }}
+                        {{ form_widget(form.options.thirdRoundMultiplier, {'attr': {'class': 'form-control additional-text'}}) }}
+                    </td>
+                    <td>
+                        <p class="additional-text-label">Third round points multiplier</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <button type="submit" class="btn btn-success save-button">Save</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}

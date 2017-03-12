@@ -2,13 +2,13 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\LeagueOptions;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use AppBundle\Entity\LeagueOptions;
 
 /**
  * Class LeagueOptionsType
@@ -22,15 +22,35 @@ class LeagueOptionsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('league', HiddenType::class);
-        $builder->add('doCountPoints', ChoiceType::class);
-        $builder->add('doCountRebounds', ChoiceType::class);
-        $builder->add('doCountAssists', ChoiceType::class);
-        $builder->add('doCountBlocks', ChoiceType::class);
-        $builder->add('doCountSteals', ChoiceType::class);
-        $builder->add('firstRoundMultiplier', IntegerType::class);
-        $builder->add('secondRoundMultiplier', IntegerType::class);
-        $builder->add('thirdRoundMultiplier', IntegerType::class);
+        $builder->add('doCountPoints', CheckboxType::class, [
+            'data' => true,
+            'required' => false
+        ]);
+        $builder->add('doCountRebounds', CheckboxType::class, [
+            'data' => true,
+            'required' => false
+        ]);
+        $builder->add('doCountAssists', CheckboxType::class, [
+            'data' => true,
+            'required' => false
+        ]);
+        $builder->add('doCountBlocks', CheckboxType::class, [
+            'data' => false,
+            'required' => false
+        ]);
+        $builder->add('doCountSteals', CheckboxType::class, [
+            'data' => false,
+            'required' => false
+        ]);
+        $builder->add('firstRoundMultiplier', TextType::class, [
+            'data' => 1
+        ]);
+        $builder->add('secondRoundMultiplier', TextType::class, [
+            'data' => 1
+        ]);
+        $builder->add('thirdRoundMultiplier', TextType::class, [
+            'data' => 1
+        ]);
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Controller;
 
@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -83,7 +84,8 @@ class LeagueController extends Controller
     /**
      * @param Request $request
      * @param League $league
-     * @return array
+     *
+     * @return array|RedirectResponse
      */
     private function processForm(Request $request, League $league)
     {
@@ -101,6 +103,9 @@ class LeagueController extends Controller
             $leagueHasUser->setUser($user);
             $leagueHasUser->setIsLeagueAdmin(true);
             $leagueHasUser->setIsActive(LeagueHasUser::V_ACTIVE);
+
+            $options = $league->getOptions();
+            $options->setIsActive(true);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($league);

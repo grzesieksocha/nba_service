@@ -55,7 +55,7 @@ class League
     private $picks;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\LeagueOptions", mappedBy="league")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\LeagueOptions", mappedBy="league", cascade={"persist"})
      */
     private $options;
 
@@ -191,6 +191,25 @@ class League
     public function setLastChangeOn($lastChangeOn)
     {
         $this->lastChangeOn = $lastChangeOn;
+        return $this;
+    }
+
+    /**
+     * @return LeagueOptions
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param LeagueOptions $options
+     *
+     * @return League
+     */
+    public function setOptions(LeagueOptions $options)
+    {
+        $this->options = $options;
         return $this;
     }
 
