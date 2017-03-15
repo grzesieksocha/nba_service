@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\League;
 use AppBundle\Entity\LeagueHasUser;
 use AppBundle\Entity\User;
+use AppBundle\Exceptions\SaveEntityFailedException;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -40,5 +41,21 @@ class LeagueHasUserRepository extends EntityRepository
         }
 
         return $leagues;
+    }
+
+    /**
+     * @param LeagueHasUser $leagueHasUser
+     *
+     * @throws SaveEntityFailedException
+     */
+    public function save(LeagueHasUser $leagueHasUser)
+    {
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($leagueHasUser);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw new SaveEntityFailedException($e->getMessage());
+        }
     }
 }

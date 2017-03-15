@@ -178,6 +178,9 @@ class League
         return $this->picks;
     }
 
+    /**
+     * @return DateTime
+     */
     public function getLastChangeOn()
     {
         return $this->lastChangeOn;

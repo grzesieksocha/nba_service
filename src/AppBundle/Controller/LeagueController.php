@@ -4,12 +4,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\League;
 use AppBundle\Entity\LeagueHasUser;
+use AppBundle\Exceptions\InvalidPasswordException;
 use AppBundle\Form\LeagueType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -42,8 +44,45 @@ class LeagueController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $leagues = $em->getRepository('AppBundle:League')->findBy(['isActive' => League::V_ACTIVE]);
+        $result = [];
 
-        return ['leagues' => $leagues];
+        /** @var League $league */
+        foreach ($leagues as $league) {
+            if ($league->getIsPrivate()) {
+                $result['private'][] = $league;
+            } else {
+                $result['public'][] = $league;
+            }
+        }
+
+        return ['leagues' => $result];
+    }
+
+    /**
+     * @Route("/join-league-ajax",
+     *     name="join_league_ajax",
+     *     condition="request.isXmlHttpRequest()",
+     *     options={"expose" = true})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function ajaxJoinLeagueAction(Request $request)
+    {
+        $data = $request->query->all();
+        $leagueId = isset($data['leagueId']) ? (int)$data['leagueId'] : null;
+        $password = isset($data['password']) ? $data['password'] : null;
+        try {
+            $result = $this->get('app.league.joiner')->validateAndJoinLeague($leagueId, $password);
+        } catch (InvalidPasswordException $e) {
+            $this->addFlash('error', 'Invalid password! Try again!!!');
+            $result = false;
+        }
+        if ($result) {
+            $this->addFlash('success', 'Joined a league! Let\'s play!!!');
+        }
+
+        return new JsonResponse($result);
     }
 
     /**

@@ -1,15 +1,52 @@
 {% extends '@App/base.html.twig' %}
 
 {% block body %}
-    <table class="table table-bordered">
-        <thead>
+    <div class="row">
+        <form class="form-inline search-box">
+            <label for="search-public"><a class="btn btn-success search-button">Search</a></label>
+            <input class="form-control form-inline" type="text" name="search-public" placeholder="ex. *eagu*" />
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Public leagues</h3>
+            <table class="table-bordered table">
+                {% if leagues.public is defined %}
+                    {% for league in leagues.public %}
+                        <tr>
+                            <td class="col-md-10"><p class="league-name">{{ league.name }}</p></td>
+                            <td class="col-md-2"><a class="btn btn-default league-joiner" data-access="public" data-league="{{ league.id }}">Join</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h3>Private leagues <span class="smaller">(password required)</span></h3>
+            <table class="table-bordered table">
+                {% if leagues.private is defined %}
+                    {% for league in leagues.private %}
+                        <tr>
+                            <td class="col-md-10 league-name"><p class="league-name">{{ league.name }}</p></td>
+                            <td class="col-md-2"><a class="btn btn-default league-joiner" data-access="private" data-league="{{ league.id }}">Join</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
 
-        </thead>
-        <tbody>
-            {% for league in leagues %}
-                {# var league \AppBundle\Entity\League #}
-                {{ league.name }}
-            {% endfor %}
-        </tbody>
-    </table>
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fos_js_routes.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/vendor/bootbox.js/bootbox.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/joinLeague.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/tables.css') }}">
 {% endblock %}

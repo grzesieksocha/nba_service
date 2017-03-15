@@ -31,3 +31,16 @@
 #table-list-matches {
     margin-top: 25px;
 }
+
+.league-name {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.search-box {
+    margin: 10px 0;
+}
+
+.smaller {
+    font-size: 15px;
+}

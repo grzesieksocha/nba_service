@@ -28,8 +28,12 @@ services:
     app.helper.file:
         class: AppBundle\Service\FileHelper
 
-    app.crawler:
-        class: AppBundle\WebScrapper\DOMCrawler
+    app.league.joiner:
+        class: AppBundle\Service\LeagueJoiner
+        arguments:
+            - '@security.token_storage'
+            - '@repository.league'
+            - '@repository.league_has_user'
 
     app.getter.basketball_reference:
         class: AppBundle\Service\BasketReferenceDataGetter

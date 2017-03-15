@@ -5,7 +5,6 @@ namespace AppBundle\Service;
 use AppBundle\Entity\League;
 use AppBundle\Repository\LeagueHasUserRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -39,7 +38,7 @@ class ActiveLeaguesProvider
      */
     public function getLeaguesForUser()
     {
-        return $this->leagueHasUserRepository->getLeaguesForUser($this->getUser());
+        return $this->leagueHasUserRepository->getLeaguesForUser(UserGetter::getUserFromToken($this->tokenStorage));
     }
 
     /**
