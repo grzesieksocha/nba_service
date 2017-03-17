@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -62,6 +61,9 @@ class Pick
      */
     private $isActive;
 
+    /**
+     * Pick constructor.
+     */
     public function __construct()
     {
         $this->statistics = new ArrayCollection();

@@ -1,9 +1,6 @@
 {% set leagues = active_leagues_provider.getLeaguesForUser() %}
-
-<a href="{{ path('league_join') }}" class="list-group-item">Join a league</a>
-<a href="{{ path('league_add') }}" class="list-group-item">Create a league</a>
 {% if leagues != null %}
-    <a href="{{ path('league_list') }}" class="list-group-item">Active leagues</a>
+    <a href="{{ path('league_list') }}" class="list-group-item"><strong>Leagues</strong></a>
         <ul class="list-group inner">
 
         {% for league in leagues %}
@@ -16,3 +13,5 @@
 {% endif %}
 <a href="{{ path('pick_new') }}" class="list-group-item">Pick a player</a>
 <a href="{{ path('match_list') }}" class="list-group-item">Matches</a>
+<a href="{{ path('league_join') }}" class="list-group-item">Join a league</a>
+<a href="{{ path('league_add') }}" class="list-group-item">Create a league</a>

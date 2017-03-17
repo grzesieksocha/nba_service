@@ -136,6 +136,8 @@ class MatchRepository extends EntityRepository
     private function getDatesForFutureMatches()
     {
         $now = new DateTime();
+        #TODO CHANGE IT!
+        $now->modify('-5 days');
 
         $query = $this->createQueryBuilder('m')
             ->select('m.date')

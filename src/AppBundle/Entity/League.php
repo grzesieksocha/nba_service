@@ -55,7 +55,7 @@ class League
     private $picks;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\LeagueOptions", mappedBy="league", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\LeagueOptions", inversedBy="league", cascade={"persist"})
      */
     private $options;
 

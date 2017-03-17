@@ -4,22 +4,38 @@
 
 {% block body %}
     <div class="row">
-        <h2 class="section-title">Leagues management</h2>
-    <a class="btn btn-success" href="{{ path('league_list') }}">Show list</a>
-    <a class="btn btn-success" href="{{ path('league_add') }}">Create new</a>
-    {% if leagues %}
-        {% if is_granted('ROLE_ADMIN') %}
-            <h3>All leagues:</h3>
-        {% else %}
-            <h3>Your leagues:</h3>
-        {% endif %}
-        <ol>
-        {% for league in leagues %}
-            <li><a href="{{ path('league_show', {'id': league.id}) }}">{{ league.name }}</a></li>
-        {% endfor %}
-        </ol>
-    {% else %}
-        You do not have any leagues!
-    {% endif %}
+        <div class="col-md-8">
+            {% if leagues %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <h3>All leagues:</h3>
+                {% else %}
+                    <h3>Your leagues:</h3>
+                {% endif %}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>League</th>
+                            <th>Position</th>
+                            <th>Leader</th>
+                            <th>Last pick</th>
+                            <th>Next pick</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for league in leagues %}
+                            <tr>
+                                <td>{{ league.name }}</td>
+                                <td>{{ positions[league.id] }}</td>
+                                <td>uuulala</td>
+                                <td>GET LAST PICK!!</td>
+                                <td>Nikoma Batumbo</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                You do not have any leagues!
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

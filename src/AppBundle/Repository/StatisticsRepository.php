@@ -118,4 +118,22 @@ class StatisticsRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @param Player $player
+     * @param Match $match
+     *
+     * @return  int[]
+     */
+    public function getStatsArray(Player $player, Match $match)
+    {
+        $stat = $this->getStats($player, $match);
+        return [
+            'points' => $stat->getPoints(),
+            'rebounds' => $stat->getRebounds(),
+            'assists' => $stat->getAssists(),
+            'steals' => $stat->getSteals(),
+            'blocks' => $stat->getBlocks()
+        ];
+    }
 }

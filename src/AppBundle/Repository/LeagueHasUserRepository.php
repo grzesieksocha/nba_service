@@ -58,4 +58,30 @@ class LeagueHasUserRepository extends EntityRepository
             throw new SaveEntityFailedException($e->getMessage());
         }
     }
+
+    /**
+     * @param User $user
+     * @param League $league
+     *
+     * @return int
+     */
+    public function getPositionForUserInLeague(User $user, League $league)
+    {
+        $result =  $this->createQueryBuilder('lhu')
+            ->select('lhu.position')
+            ->andWhere('lhu.user = :user')
+            ->andWhere('lhu.league = :league')
+            ->andWhere('lhu.isActive = true')
+            ->setParameters([
+                'user' => $user,
+                'league' => $league
+            ])
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (null !== $result) {
+            return $result['position'];
+        }
+        return $result;
+    }
 }

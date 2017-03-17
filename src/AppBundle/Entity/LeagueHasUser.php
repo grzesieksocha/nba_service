@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -43,6 +43,16 @@ class LeagueHasUser
      * @ORM\Column(name="is_league_admin", type="boolean")
      */
     private $isLeagueAdmin;
+
+    /**
+     * @ORM\Column(name="sum_of_points", type="integer", nullable=false, options={"default":0})
+     */
+    private $sumOfPoints;
+
+    /**
+     * @ORM\Column(name="position", type="integer", nullable=false, options={"default":0})
+     */
+    private $position;
 
     /**
      * @ORM\Column(name="last_change_on", type="datetime")
@@ -111,6 +121,7 @@ class LeagueHasUser
 
     /**
      * @param boolean $isLeagueAdmin
+     *
      * @return LeagueHasUser
      */
     public function setIsLeagueAdmin(bool $isLeagueAdmin)
@@ -119,14 +130,58 @@ class LeagueHasUser
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getSumOfPoints()
+    {
+        return $this->sumOfPoints;
+    }
+
+    /**
+     * @param $sumOfPoints
+     *
+     * @return LeagueHasUser
+     */
+    public function setSumOfPoints($sumOfPoints)
+    {
+        $this->sumOfPoints = $sumOfPoints;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     *
+     * @return LeagueHasUser
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+        return $this;
+    }
+
     public function getLastChangeOn()
     {
         return $this->lastChangeOn;
     }
 
+    /**
+     * @param $lastChangeOn
+     *
+     * @return LeagueHasUser
+     */
     public function setLastChangeOn($lastChangeOn)
     {
         $this->lastChangeOn = $lastChangeOn;
+        return $this;
     }
 
     /**

@@ -39,3 +39,9 @@ services:
         class: AppBundle\Service\BasketReferenceDataGetter
         arguments:
             - '@service_container'
+
+    app.pick.points_resolver:
+        class: AppBundle\Pick\PointsResolver
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@repository.statistics'

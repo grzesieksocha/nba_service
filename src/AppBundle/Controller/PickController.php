@@ -8,7 +8,6 @@ use AppBundle\Form\PickType;
 use AppBundle\Repository\MatchRepository;
 
 use AppBundle\Repository\PickRepository;
-use AppBundle\Repository\PlayerRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -88,9 +87,9 @@ class PickController extends Controller
             $em->persist($pick);
             $em->flush();
 
-            $this->addFlash('success', 'Match added!');
+            $this->addFlash('success', 'Pick saved!');
 
-            return $this->redirectToRoute('match_list');
+            return $this->redirectToRoute('pick_new');
         }
 
         return ['form' => $form->createView()];

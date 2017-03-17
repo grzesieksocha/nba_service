@@ -7,6 +7,7 @@ use AppBundle\Entity\LeagueHasUser;
 use AppBundle\Exceptions\InvalidPasswordException;
 use AppBundle\Form\LeagueType;
 
+use AppBundle\Repository\LeagueHasUserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -30,10 +31,17 @@ class LeagueController extends Controller
     public function listAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $leagues = $em->getRepository('AppBundle:LeagueHasUser')
-            ->getLeaguesForUser($this->getUser());
+        /** @var LeagueHasUserRepository $leagueHasUserRepo */
+        $leagueHasUserRepo = $em->getRepository('AppBundle:LeagueHasUser');
+        $leagues = $leagueHasUserRepo->getLeaguesForUser($this->getUser());
 
-        return ['leagues' => $leagues];
+        $positions = [];
+        foreach ($leagues as $league) {
+            $positions[$league->getId()] = $leagueHasUserRepo
+                ->getPositionForUserInLeague($this->getUser(), $league);
+        }
+
+        return ['leagues' => $leagues, 'positions' => $positions];
     }
 
     /**
@@ -56,33 +64,6 @@ class LeagueController extends Controller
         }
 
         return ['leagues' => $result];
-    }
-
-    /**
-     * @Route("/join-league-ajax",
-     *     name="join_league_ajax",
-     *     condition="request.isXmlHttpRequest()",
-     *     options={"expose" = true})
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function ajaxJoinLeagueAction(Request $request)
-    {
-        $data = $request->query->all();
-        $leagueId = isset($data['leagueId']) ? (int)$data['leagueId'] : null;
-        $password = isset($data['password']) ? $data['password'] : null;
-        try {
-            $result = $this->get('app.league.joiner')->validateAndJoinLeague($leagueId, $password);
-        } catch (InvalidPasswordException $e) {
-            $this->addFlash('error', 'Invalid password! Try again!!!');
-            $result = false;
-        }
-        if ($result) {
-            $this->addFlash('success', 'Joined a league! Let\'s play!!!');
-        }
-
-        return new JsonResponse($result);
     }
 
     /**
@@ -140,11 +121,14 @@ class LeagueController extends Controller
             $leagueHasUser = new LeagueHasUser();
             $leagueHasUser->setLeague($league);
             $leagueHasUser->setUser($user);
-            $leagueHasUser->setIsLeagueAdmin(true);
+            $leagueHasUser->setIsLeagueAdmin(true)
+                ->setSumOfPoints(0)
+                ->setPosition(0);
             $leagueHasUser->setIsActive(LeagueHasUser::V_ACTIVE);
 
             $options = $league->getOptions();
             $options->setIsActive(true);
+            $league->setOptions($options);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($league);
@@ -159,7 +143,6 @@ class LeagueController extends Controller
         return ['form' => $form->createView()];
     }
 
-
     /**
      * @Route("/{id}", name="league_show")
      * @Template("@App/league/leagueShow.html.twig")
@@ -170,11 +153,38 @@ class LeagueController extends Controller
      */
     public function showAction(League $league)
     {
-        $players = $league->getUsers();
+        $playersData = $league->getLeagueHasUsers();
 
         return [
             'league' => $league,
-            'players' => $players
+            'playersData' => $playersData
         ];
+    }
+
+    /**
+     * @Route("/join-league-ajax",
+     *     name="join_league_ajax",
+     *     condition="request.isXmlHttpRequest()",
+     *     options={"expose" = true})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function ajaxJoinLeagueAction(Request $request)
+    {
+        $data = $request->query->all();
+        $leagueId = isset($data['leagueId']) ? (int)$data['leagueId'] : null;
+        $password = isset($data['password']) ? $data['password'] : null;
+        try {
+            $result = $this->get('app.league.joiner')->validateAndJoinLeague($leagueId, $password);
+        } catch (InvalidPasswordException $e) {
+            $this->addFlash('error', 'Invalid password! Try again!!!');
+            $result = false;
+        }
+        if ($result) {
+            $this->addFlash('success', 'Joined a league! Let\'s play!!!');
+        }
+
+        return new JsonResponse($result);
     }
 }

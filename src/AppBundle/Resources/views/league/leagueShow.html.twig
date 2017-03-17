@@ -3,23 +3,47 @@
 {% block title %}NBA Play-Off{% endblock %}
 
 {% block body %}
-    <h3>
-        {{ league.name }}
-        {% if league.isPrivate %}
-            (private)
-        {% endif %}
-        {% if is_granted('ROLE_ADMIN') %}
-            <a class="btn btn-success" href="{{ path('league_edit', {'id': league.id}) }}">Edit</a>
-        {% endif %}
-    </h3>
-    <strong>Players:</strong>
-    {% if players %}
-        <ol>
-            {% for player in players %}
-                <li>{{ player.username|capitalize }}</li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        No active players yet!
-    {% endif %}
+    <div class="row">
+        <div>
+            <h3>
+                {{ league.name }}
+                {% if league.isPrivate %}
+                    (private)
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-success" href="{{ path('league_edit', {'id': league.id}) }}">Edit</a>
+                {% endif %}
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-hover">
+                {% if playersData %}
+                    <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Player</th>
+                        <th>Points</th>
+                        <th>Last pick</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for player in playersData %}
+                        <tr>
+                            <td>{{ player.position }}</td>
+                            <td>{{ player.user.username|capitalize }}</td>
+                            <td>{{ player.sumOfPoints }}</td>
+                            <td>GET LAST PICK!!</td>
+                            <td>Show picks</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% else %}
+                    No active players yet!
+                {% endif %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

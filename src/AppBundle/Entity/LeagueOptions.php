@@ -24,7 +24,7 @@ class LeagueOptions
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\League", inversedBy="options")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\League", mappedBy="options")
      */
     private $league;
 

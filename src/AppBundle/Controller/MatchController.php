@@ -150,11 +150,11 @@ class MatchController extends Controller
      */
     private function getMatchProperties(Match $match)
     {
-        $result['id'] = $match->getHomeTeam()->getId();
+        $result['id'] = $match->getId();
         $result['homeTeam'] = $match->getHomeTeam()->getFullName();
         $result['awayTeam'] = $match->getAwayTeam()->getFullName();
         $result['homeTeamPoints'] = $match->getHomeTeamPoints();
-        $result['awayTeamPoints'] = $match->getHomeTeamPoints();
+        $result['awayTeamPoints'] = $match->getAwayTeamPoints();
         $result['date'] = $match->getDate()->format('d/m H:i');
         return $result;
     }
