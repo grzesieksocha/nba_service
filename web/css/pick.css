@@ -1,0 +1,9 @@
+select {
+    width: 200px;
+    margin-left: 20px;
+    background-color: #ff471a;
+}
+
+th span {
+    margin-left: 15px;
+}

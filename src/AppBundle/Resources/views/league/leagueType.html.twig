@@ -14,8 +14,8 @@
                         {{ form_label(form.name) }}
                     </td>
                     <td>
-                        {{ form_errors(form.name) }}
                         {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.name) }}
                     </td>
                 </tr>
                 <tr>
@@ -23,8 +23,8 @@
                         {{ form_label(form.description) }}
                     </td>
                     <td>
-                        {{ form_errors(form.description) }}
                         {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.description) }}
                     </td>
                 </tr>
                 <tr>
@@ -32,8 +32,8 @@
                         {{ form_label(form.isPrivate) }}
                     </td>
                     <td>
-                        {{ form_errors(form.isPrivate) }}
                         {{ form_widget(form.isPrivate) }}
+                        {{ form_errors(form.isPrivate) }}
                         <span id="ask-for-passwd" style="display: none;">Please enter a password</span>
                     </td>
                 </tr>
@@ -42,8 +42,8 @@
                         {{ form_label(form.password) }}
                     </td>
                     <td>
-                        {{ form_errors(form.password) }}
                         {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.password) }}
                     </td>
                 </tr>
             </table>

@@ -21,9 +21,11 @@ $(document).ready(function () {
     });
 
     function joinLeagueAjax(leagueId, password) {
+        console.log(leagueId + ' ' + password);
+        password = 'aaa';
         $.ajax({
             url: Routing.generate('join_league_ajax'),
-            type: 'GET',
+            type: 'POST',
             data: {
                 leagueId: leagueId,
                 password: password

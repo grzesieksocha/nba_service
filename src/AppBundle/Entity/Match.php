@@ -79,6 +79,14 @@ class Match
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getDescription();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -244,5 +252,13 @@ class Match
     public function updateLastChangedOn()
     {
         $this->setLastChangeOn(new DateTime(date('Y-m-d H:i:s')));
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getAwayTeam()->getFullName() . ' @ ' . $this->getHomeTeam()->getFullName();
     }
 }

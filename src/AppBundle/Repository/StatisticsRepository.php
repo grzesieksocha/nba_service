@@ -120,6 +120,8 @@ class StatisticsRepository extends EntityRepository
     }
 
     /**
+     * Get player statistics from the match and puts them into an array
+     *
      * @param Player $player
      * @param Match $match
      *

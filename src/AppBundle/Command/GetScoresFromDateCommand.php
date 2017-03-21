@@ -72,6 +72,7 @@ class GetScoresFromDateCommand extends ContainerAwareCommand
         $dateTime->setTime(0, 0);
         $urls = $this->buildUrlMatchArray($dateTime);
         $matchesDataFiles = [];
+        $output->writeln('Number of matches: ' . count($urls));
         foreach ($urls as $url => $match) {
             $filename = 'stats_' . $match->getAwayTeam()->getShort() . '_' . $match->getHomeTeam()->getShort();
             $processedFilename = $this->getDomCrawler($url)->writeStatsDataToFile($filename);

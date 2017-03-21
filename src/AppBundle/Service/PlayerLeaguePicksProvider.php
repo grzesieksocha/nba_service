@@ -2,13 +2,16 @@
 
 namespace AppBundle\Service;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+
+use Doctrine\Common\Persistence\ObjectRepository;
+
 use AppBundle\Entity\League;
 use AppBundle\Entity\Player;
 use AppBundle\Entity\User;
 use AppBundle\Repository\PickRepository;
-use DateTime;
-use Doctrine\Common\Persistence\ObjectRepository;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+
+use \DateTime;
 
 /**
  * Class PlayerLeaguePicksProvider

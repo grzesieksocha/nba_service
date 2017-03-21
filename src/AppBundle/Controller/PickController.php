@@ -3,11 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\League;
+use AppBundle\Entity\Match;
 use AppBundle\Entity\Pick;
 use AppBundle\Form\PickType;
 use AppBundle\Repository\MatchRepository;
 
 use AppBundle\Repository\PickRepository;
+use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -82,6 +84,7 @@ class PickController extends Controller
                 ->setMatch($em->getRepository('AppBundle:Match')->find($data['pick']['match']))
                 ->setPlayer($em->getRepository('AppBundle:Player')->find($data['pick']['player']))
                 ->setPoints(0)
+                ->setPointsInLeague(false)
                 ->setIsActive(true);
 
             $em->persist($pick);
@@ -108,9 +111,10 @@ class PickController extends Controller
     {
         /** @var MatchRepository $matchRepo */
         $matchRepo = $this->get('repository.match');
-        $matches = $matchRepo->getAllMatchesForDate(
-            $this->getDateToCheck($request->query->keys())
-        );
+
+        $dateTime = $this->getDateToLookForMatches($request->query->keys()[0]);
+        $matches = $matchRepo->getAllMatchesForDate($dateTime);
+
         $result = [];
         $result[0] = 'Now choose teams...';
         foreach ($matches as $match) {
@@ -137,27 +141,45 @@ class PickController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var PickRepository $pickRepo */
         $pickRepo = $this->get('repository.pick');
+        /** @var Match $match */
         $match = $em->find('AppBundle:Match', $ajaxData['matchId']);
         $league = $em->find('AppBundle:League', $ajaxData['leagueId']);
         $players = $match->getAllPlayers();
         $players = $pickRepo->removeUsedPicks($players, $match, $league, $user);
         foreach ($players as $player) {
-            $result[$player->getId()] =
+            $result[$player->getTeam()->getFullName()][$player->getId()] =
                 $player->getFirstName() . ' ' . $player->getLastName();
         }
         return new JsonResponse($result);
     }
 
     /**
-     * @param array $dateFromRequest
+     * @Route("/validatePick",
+     *     name="ajax_validate_pick",
+     *     condition="request.isXmlHttpRequest()",
+     *     options={"expose" = true})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function ajaxValidatePick(Request $request)
+    {
+        $data = $request->query->all();
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @param string $date
      *
      * @return DateTime
      */
-    private function getDateToCheck(array $dateFromRequest) {
-        $dateFromRequest = explode('/', $dateFromRequest[0]);
-        $dateToCheck = new DateTime();
-        $dateToCheck->setDate(2017, (int)$dateFromRequest[0], (int)$dateFromRequest[1]);
-        $dateToCheck->setTime(0, 0);
-        return $dateToCheck;
+    private function getDateToLookForMatches(string $date): DateTime
+    {
+        $date = explode('/', $date);
+        $timezone = new DateTimeZone('EST');
+        $dateTime = new DateTime('now', $timezone);
+        $dateTime->setDate((int)$dateTime->format('Y'), (int)$date[0], (int)$date[1]);
+        $dateTime->setTime(0, 0);
+        return $dateTime;
     }
 }

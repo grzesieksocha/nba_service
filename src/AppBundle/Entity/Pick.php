@@ -52,6 +52,11 @@ class Pick
     private $points;
 
     /**
+     * @ORM\Column(name="points_in_league", type="boolean", nullable=false, options={"default": false})
+     */
+    private $pointsInLeague;
+
+    /**
      * @ORM\Column(name="last_change_on", type="datetime")
      */
     private $lastChangeOn;
@@ -163,12 +168,29 @@ class Pick
 
     /**
      * @param int $points
-     *
      * @return Pick
      */
     public function setPoints(int $points)
     {
         $this->points = $points;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPointsInLeague()
+    {
+        return $this->pointsInLeague;
+    }
+
+    /**
+     * @param bool $pointsInLeague
+     * @return Pick
+     */
+    public function setPointsInLeague(bool $pointsInLeague)
+    {
+        $this->pointsInLeague = $pointsInLeague;
         return $this;
     }
 
@@ -182,7 +204,6 @@ class Pick
 
     /**
      * @param bool $isActive
-     *
      * @return Pick
      */
     public function setIsActive(bool $isActive)

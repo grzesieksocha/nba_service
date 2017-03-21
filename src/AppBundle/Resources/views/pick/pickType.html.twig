@@ -3,12 +3,32 @@
 {% block title %}Pick a player{% endblock %}
 
 {% block body %}
-    <div class="col-md-10">
-        <h2 class="text-center">Add a new pick to rule the world!</h2>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit" class="btn btn-success center-block">Save</button>
-        {{ form_end(form) }}
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="text-center">Add a new pick to rule the world!</h2>
+            {{ form_start(form) }}
+            <table class="table table-bordered">
+                <tr>
+                    <th><span>League</span></th>
+                    <td>{{ form_widget(form.league) }}</td>
+                </tr>
+                <tr>
+                    <th><span>Date</span></th>
+                    <td>{{ form_widget(form.date) }}</td>
+                </tr>
+                <tr>
+                    <th><span>Match</span></th>
+                    <td>{{ form_widget(form.match) }}</td>
+                </tr>
+                <tr>
+                    <th><span>Player</span></th>
+                    <td>{{ form_widget(form.player) }}</td>
+                </tr>
+            </table>
+            {{ form_widget(form) }}
+            <button id="submit-button" type="submit" class="btn btn-success center-block" disabled="disabled">Save</button>
+            {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}
 
@@ -17,4 +37,9 @@
     <script src="{{ asset('js/pickType.js') }}"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ asset('js/fos_js_routes.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/pick.css') }}">
 {% endblock %}

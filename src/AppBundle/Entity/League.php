@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,16 +27,32 @@ class League
     private $id;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 20,
+     *     minMessage="League name must be at least {{ limit }} characters long",
+     *     maxMessage="League name cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="name", type="string", length=20, unique=true)
      */
     private $name;
 
     /**
+     * @Assert\Length(
+     *     min = 5,
+     *     max = 255,
+     *     minMessage="Description must be at least {{ limit }} characters long",
+     *     maxMessage="Description cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
 
     /**
+     * @Assert\Type(
+     *     type="boolean",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
      * @ORM\Column(name="is_private", type="boolean")
      */
     private $isPrivate;

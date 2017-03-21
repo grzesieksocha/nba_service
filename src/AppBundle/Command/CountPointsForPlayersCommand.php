@@ -7,12 +7,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Doctrine\Common\Persistence\ObjectManager;
+
+use AppBundle\Helpers\DateHelper;
 use AppBundle\Pick\PointsResolver;
 use AppBundle\Repository\PickRepository;
 use AppBundle\Repository\MatchRepository;
-
-use \DateTime;
-use \DateTimeZone;
 
 /**
  * Class CountPointsForPlayersCommand
@@ -20,11 +20,20 @@ use \DateTimeZone;
  */
 class CountPointsForPlayersCommand extends ContainerAwareCommand
 {
+    /** @var MatchRepository $matchRepo */
+    private $matchRepository;
+    /** @var PickRepository $pickRepository */
+    private $pickRepository;
+    /** @var PointsResolver $pointsResolver */
+    private $pointsResolver;
+    /** @var ObjectManager $entityManager */
+    private $entityManager;
+
     protected function configure()
     {
-        $this->setName('count:points')
+        $this->setName('nba:count:points')
             ->setDescription('After a long night of games give players their points')
-            ->addArgument('date', InputArgument::REQUIRED, 'Date of the matches (MM/DD)');
+            ->addArgument('date', InputArgument::REQUIRED, 'Date of the matches (YYYY/MM/DD)');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -36,34 +45,35 @@ class CountPointsForPlayersCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var MatchRepository $matchRepo */
-        $matchRepo = $this->getContainer()->get('repository.match');
-        /** @var PickRepository $pickRepo */
-        $pickRepo = $this->getContainer()->get('repository.pick');
-        /** @var PointsResolver $pointsResolver */
-        $pointsResolver = $this->getContainer()->get('app.pick.points_resolver');
-        $em = $this->getContainer()->get('doctrine')->getManager();
-
+        $this->setRepositories();
         $output->writeln([
             'Updating points from ' . $input->getArgument('date') . ' in the database...',
             '---------------------------------',
             ''
         ]);
 
-        $date = explode('/', $input->getArgument('date'));
-        $timezone = new DateTimeZone('EST');
-        $dateTime = new DateTime('now', $timezone);
-        $dateTime->setDate((int)$dateTime->format('Y'), (int)$date[0], (int)$date[1]);
-        $dateTime->setTime(0, 0);
-        $matches = $matchRepo->getAllMatchesForDate($dateTime);
+        $matches = $this->matchRepository->getAllMatchesForDate(
+            DateHelper::getEstDateTimeFromString($input->getArgument('date'), 'EST')
+        );
 
         foreach ($matches as $match) {
-            $output->writeln('Update\'ing matches for: ' . $match->getAwayTeam() . ' @ ' . $match->getHomeTeam());
-            $picks = $pickRepo->getPicksForMatch($match);
+            $output->writeln('Updating matches for: ' . $match->getDescription());
+            $picks = $this->pickRepository->getPicksForMatch($match);
             foreach ($picks as $pick) {
-                $pointsResolver->updatePoints($pick);
-                $em->flush();
+                $leagueHasUser = $this->pointsResolver->updatePoints($pick);
+                $this->entityManager->persist($pick);
+                $this->entityManager->persist($leagueHasUser);
             }
+            $this->entityManager->flush();
+
         }
+    }
+
+    private function setRepositories()
+    {
+        $this->matchRepository = $this->getContainer()->get('repository.match');
+        $this->pickRepository = $this->getContainer()->get('repository.pick');
+        $this->pointsResolver = $this->getContainer()->get('app.pick.points_resolver');
+        $this->entityManager = $this->getContainer()->get('doctrine')->getManager();
     }
 }

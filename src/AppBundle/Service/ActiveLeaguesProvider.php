@@ -40,18 +40,4 @@ class ActiveLeaguesProvider
     {
         return $this->leagueHasUserRepository->getLeaguesForUser(UserGetter::getUserFromToken($this->tokenStorage));
     }
-
-    /**
-     * @return mixed
-     */
-    private function getUser()
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-        if (!$user) {
-            throw new \LogicException(
-                'The user is not authenticated!!!'
-            );
-        }
-        return $user;
-    }
 }

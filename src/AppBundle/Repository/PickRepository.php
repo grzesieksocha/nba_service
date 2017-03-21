@@ -97,17 +97,10 @@ class PickRepository extends EntityRepository
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.isActive = true')
+            ->andWhere('p.pointsInLeague = false')
             ->andWhere('p.match = :match')
             ->setParameter('match', $match)
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * @param Pick $pick
-     */
-    public function updatePoints(Pick $pick)
-    {
-
     }
 }

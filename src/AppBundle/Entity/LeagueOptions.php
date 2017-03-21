@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use \DateTime;
 
 /**
@@ -54,16 +56,34 @@ class LeagueOptions
     private $doCountSteals;
 
     /**
+     * @Assert\Range(
+     *     min = 1,
+     *     max = 20,
+     *     minMessage="Multiplier must be at least {{ limit }}",
+     *     maxMessage="Multiplier must be less than {{ limit }} characters"
+     * )
      * @ORM\Column(name="first_round_multiplier", type="integer", nullable=false, options={"default":1})
      */
     private $firstRoundMultiplier;
 
     /**
+     * @Assert\Range(
+     *     min = 1,
+     *     max = 20,
+     *     minMessage="Multiplier must be at least {{ limit }}",
+     *     maxMessage="Multiplier must be less than {{ limit }} characters"
+     * )
      * @ORM\Column(name="second_round_multiplier", type="integer", nullable=false, options={"default":1})
      */
     private $secondRoundMultiplier;
 
     /**
+     * @Assert\Range(
+     *     min = 1,
+     *     max = 20,
+     *     minMessage="Multiplier must be at least {{ limit }}",
+     *     maxMessage="Multiplier must be less than {{ limit }} characters"
+     * )
      * @ORM\Column(name="third_round_multiplier", type="integer", nullable=false, options={"default":1})
      */
     private $thirdRoundMultiplier;

@@ -60,6 +60,8 @@ class LeagueHasUserRepository extends EntityRepository
     }
 
     /**
+     * Gets user position
+     *
      * @param User $user
      * @param League $league
      *
@@ -82,6 +84,26 @@ class LeagueHasUserRepository extends EntityRepository
         if (null !== $result) {
             return $result['position'];
         }
+        return $result;
+    }
+
+    /**
+     * Get user with the number of points he has
+     *
+     * @param League $league
+     * @return array
+     */
+    public function getPointsUsersMap(League $league)
+    {
+        $result =  $this->createQueryBuilder('lhu')
+            ->select('lhu.sumOfPoints')
+            ->select('lhu.user')
+            ->andWhere('lhu.league = :league')
+            ->andWhere('lhu.isActive = true')
+            ->setParameter('league', $league)
+            ->getQuery()
+            ->getResult();
+
         return $result;
     }
 }

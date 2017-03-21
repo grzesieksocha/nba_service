@@ -39,4 +39,21 @@ class DateHelper
 
         return [$startOfDay, $endOfDay];
     }
+
+    /**
+     * Method converts sting date from format YYYY/MM/DD into given timezone DateTime
+     *
+     * @param string $date
+     * @param string $timezone
+     * @return DateTime
+     */
+    public static function getEstDateTimeFromString(string $date, string $timezone = 'UTC')
+    {
+        $date = explode('/', $date);
+        $timezone = new DateTimeZone($timezone);
+        $dateTime = new DateTime('now', $timezone);
+        $dateTime->setDate((int)$date[0], (int)$date[1], (int)$date[2]);
+        $dateTime->setTime(0, 0);
+        return $dateTime;
+    }
 }

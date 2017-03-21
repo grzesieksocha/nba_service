@@ -78,6 +78,8 @@ class LeagueJoiner
         $lhu->setUser(UserGetter::getUserFromToken($this->tokenStorage))
             ->setLeague($league)
             ->setIsActive(true)
+            ->setSumOfPoints(0)
+            ->setPosition(0)
             ->setIsLeagueAdmin(false);
         $this->leagueHasUserRepository->save($lhu);
     }

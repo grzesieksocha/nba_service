@@ -144,7 +144,7 @@ class LeagueController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="league_show")
+     * @Route("/{id}", name="league_show", requirements={"id": "\d+"})
      * @Template("@App/league/leagueShow.html.twig")
      *
      * @param League $league
@@ -172,7 +172,7 @@ class LeagueController extends Controller
      */
     public function ajaxJoinLeagueAction(Request $request)
     {
-        $data = $request->query->all();
+        $data = $request->request->all();
         $leagueId = isset($data['leagueId']) ? (int)$data['leagueId'] : null;
         $password = isset($data['password']) ? $data['password'] : null;
         try {

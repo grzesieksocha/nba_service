@@ -43,5 +43,5 @@ services:
     app.pick.points_resolver:
         class: AppBundle\Pick\PointsResolver
         arguments:
-            - '@doctrine.orm.entity_manager'
             - '@repository.statistics'
+            - '@repository.league_has_user'

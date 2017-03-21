@@ -2,14 +2,18 @@
 
 namespace AppBundle\Pick;
 
-use Doctrine\ORM\EntityManager;
-
-use AppBundle\Entity\LeagueOptions;
-use AppBundle\Entity\Match;
-use AppBundle\Entity\Pick;
-use AppBundle\Entity\Player;
-use AppBundle\Repository\StatisticsRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
+
+use AppBundle\Entity\Pick;
+use AppBundle\Entity\Match;
+use AppBundle\Entity\Player;
+use AppBundle\Entity\LeagueOptions;
+use AppBundle\Repository\StatisticsRepository;
+use AppBundle\Repository\LeagueHasUserRepository;
+use AppBundle\Entity\League;
+use AppBundle\Entity\LeagueHasUser;
+use AppBundle\Entity\User;
 
 /**
  * Class PointsResolver
@@ -18,48 +22,57 @@ use Doctrine\ORM\EntityRepository;
 class PointsResolver
 {
     /**
-     * @var EntityManager
-     */
-    private $entityManager;
-    /**
      * @var StatisticsRepository|EntityRepository
      */
     private $statisticsRepository;
+    /**
+     * @var LeagueHasUserRepository|EntityRepository
+     */
+    private $leagueHasUserRepository;
 
     /**
-     * @param EntityManager $entityManager
      * @param EntityRepository $statisticsRepository
+     * @param EntityRepository $leagueHasUserRepository
      * @internal param MatchRepository $matchRepository
      */
-    public function __construct(EntityManager $entityManager, EntityRepository $statisticsRepository)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        EntityRepository $statisticsRepository,
+        EntityRepository $leagueHasUserRepository
+) {
         $this->statisticsRepository = $statisticsRepository;
+        $this->leagueHasUserRepository = $leagueHasUserRepository;
     }
+
     /**
+     * Counts points that user got from the last pick and adds it to the sum of points in his league
+     *
      * @param Pick $pick
+     *
+     * @return LeagueHasUser to persist it
      */
     public function updatePoints(Pick $pick)
     {
-        #TODO apply cache here!
         $league = $pick->getLeague();
         $options = $league->getOptions();
-        $points = $this->getPoints($pick->getMatch(), $pick->getPlayer(), $league->getOptions());
+        $points = $this->countPoints($pick->getMatch(), $pick->getPlayer(), $options);
+        $lhu = $this->addPointsToUserAccount($league, $pick->getUser(), $points);
         $pick->setPoints($points);
-        $this->entityManager->persist($pick);
+        $pick->setPointsInLeague(true);
+        return $lhu;
     }
 
     /**
+     * Counts player points from the last user pick
+     *
      * @param Match $match
      * @param Player $player
      * @param LeagueOptions $leagueOptions
      *
      * @return int
      */
-    private function getPoints(Match $match, Player $player, LeagueOptions $leagueOptions)
+    private function countPoints(Match $match, Player $player, LeagueOptions $leagueOptions)
     {
         $points = 0;
-        #TODO every match should have level
         $options = $this->buildOptionsArray($leagueOptions);
         $stats = $this->getStatArray($player, $match);
         foreach ($options as $optionName => $isActive) {
@@ -72,9 +85,11 @@ class PointsResolver
     }
 
     /**
+     * Checks which player stats are taken in the consideration by the league
+     *
      * @param LeagueOptions $leagueOptions
      *
-     * @return int[]
+     * @return int[] statName => true|false
      */
     private function buildOptionsArray(LeagueOptions $leagueOptions)
     {
@@ -89,13 +104,41 @@ class PointsResolver
     }
 
     /**
+     * Gets an array with the players statistics from a given match
+     *
      * @param Player $player
      * @param Match $match
      *
-     * @return int[]
+     * @return int[] statName => value
      */
     private function getStatArray(Player $player, Match $match)
     {
         return $this->statisticsRepository->getStatsArray($player, $match);
+    }
+
+    /**
+     * Adding points from the last pick to the overall count in the league
+     *
+     * @param League $league
+     * @param User $user
+     * @param int $points
+     *
+     * @return LeagueHasUser
+     *
+     * @throws EntityNotFoundException
+     */
+    private function addPointsToUserAccount(League $league, User $user, int $points)
+    {
+        $lhu = $this->leagueHasUserRepository->findOneBy([
+            'league' => $league,
+            'user' => $user,
+            'isActive' => true
+        ]);
+
+        if ($lhu instanceof LeagueHasUser) {
+            return $lhu->setSumOfPoints($lhu->getSumOfPoints() + $points);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 }
