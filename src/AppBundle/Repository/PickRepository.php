@@ -10,6 +10,7 @@ use AppBundle\Entity\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class PickRepository
@@ -102,5 +103,53 @@ class PickRepository extends EntityRepository
             ->setParameter('match', $match)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param $league
+     * @param $user
+     *
+     * @return Pick
+     */
+    public function getLatestCountedPick($league, $user)
+    {
+        return $this->getQueryBuilderForPicks($league, $user)
+            ->andWhere('p.pointsInLeague = true')
+            ->addOrderBy('m.date', 'desc')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param $league
+     * @param $user
+     *
+     * @return Pick
+     */
+    public function getNextPick($league, $user)
+    {
+        return $this->getQueryBuilderForPicks($league, $user)
+            ->andWhere('p.pointsInLeague = false')
+            ->addOrderBy('m.date', 'asc')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param $league
+     * @param $user
+     *
+     * @return QueryBuilder
+     */
+    private function getQueryBuilderForPicks($league, $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.match', 'm')
+            ->andWhere('p.isActive = true')
+            ->andWhere('p.league = :league')
+            ->andWhere('p.user = :user')
+            ->setParameter('league', $league)
+            ->setParameter('user', $user)
+            ->setMaxResults(1);
     }
 }

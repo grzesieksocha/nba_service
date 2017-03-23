@@ -17,7 +17,7 @@
                             <th>League</th>
                             <th>Position</th>
                             <th>Leader</th>
-                            <th>Last pick</th>
+                            <th>Last counted pick</th>
                             <th>Next pick</th>
                         </tr>
                     </thead>
@@ -26,9 +26,27 @@
                             <tr>
                                 <td>{{ league.name }}</td>
                                 <td>{{ positions[league.id] }}</td>
-                                <td>uuulala</td>
-                                <td>GET LAST PICK!!</td>
-                                <td>Nikoma Batumbo</td>
+                                <td>
+                                    {% if leaders[league.id] == null %}
+                                        No leader yet!
+                                    {% else %}
+                                        {{ leaders[league.id] }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lastPicks[league.id]['player'] == null %}
+                                        No pick!
+                                    {% else %}
+                                        {{ lastPicks[league.id]['player'] }} ({{ lastPicks[league.id]['points'] }})
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if closePicks[league.id]['player'] == null %}
+                                        No pick!
+                                    {% else %}
+                                        {{ closePicks[league.id]['player'] }}
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

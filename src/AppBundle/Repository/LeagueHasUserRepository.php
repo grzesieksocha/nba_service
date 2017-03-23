@@ -17,6 +17,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class LeagueHasUserRepository extends EntityRepository
 {
+    const LEAGUE_LEADER = 1;
+
     /**
      * @param User $user
      *

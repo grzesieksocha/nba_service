@@ -4,10 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\League;
 use AppBundle\Entity\LeagueHasUser;
+use AppBundle\Entity\Pick;
 use AppBundle\Exceptions\InvalidPasswordException;
 use AppBundle\Form\LeagueType;
 
 use AppBundle\Repository\LeagueHasUserRepository;
+use AppBundle\Repository\PickRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -33,15 +35,22 @@ class LeagueController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var LeagueHasUserRepository $leagueHasUserRepo */
         $leagueHasUserRepo = $em->getRepository('AppBundle:LeagueHasUser');
+        /** @var PickRepository $pickRepo */
+        $pickRepo = $em->getRepository('AppBundle:Pick');
         $leagues = $leagueHasUserRepo->getLeaguesForUser($this->getUser());
 
-        $positions = [];
-        foreach ($leagues as $league) {
-            $positions[$league->getId()] = $leagueHasUserRepo
-                ->getPositionForUserInLeague($this->getUser(), $league);
-        }
+        $positions = $this->getPositionsMap($leagues, $leagueHasUserRepo);
+        $leaders = $this->getLeadersMap($leagues, $leagueHasUserRepo);
+        $lastPicks = $this->getLatestPicksMap($leagues, $pickRepo);
+        $closePicks = $this->getClosestPickMap($leagues, $pickRepo);
 
-        return ['leagues' => $leagues, 'positions' => $positions];
+        return [
+            'leagues' => $leagues,
+            'positions' => $positions,
+            'leaders' => $leaders,
+            'lastPicks' => $lastPicks,
+            'closePicks' => $closePicks
+        ];
     }
 
     /**
@@ -186,5 +195,91 @@ class LeagueController extends Controller
         }
 
         return new JsonResponse($result);
+    }
+
+    /**
+     * @param League[] $leagues
+     * @param LeagueHasUserRepository $leagueHasUserRepo
+     *
+     * @return array
+     */
+    private function getPositionsMap(array $leagues, LeagueHasUserRepository $leagueHasUserRepo): array
+    {
+        $positions = [];
+        foreach ($leagues as $league) {
+            $positions[$league->getId()] = $leagueHasUserRepo
+                ->getPositionForUserInLeague($this->getUser(), $league);
+        }
+        return $positions;
+    }
+
+    /**
+     * @param League[] $leagues
+     * @param LeagueHasUserRepository $leagueHasUserRepo
+     *
+     * @return array
+     */
+    private function getLeadersMap(array $leagues, LeagueHasUserRepository $leagueHasUserRepo): array
+    {
+        $leaders = [];
+        foreach ($leagues as $league) {
+            $lhu = $leagueHasUserRepo->findOneBy([
+                'league' => $league,
+                'position' => LeagueHasUserRepository::LEAGUE_LEADER,
+                'isActive' => true
+            ]);
+            if ($lhu instanceof LeagueHasUser) {
+                $username = $lhu->getUser()->getUsername();
+                if ($username === $this->getUser()->getUsername()) {
+                    $leaders[$league->getId()] = 'YOU (clap)';
+                } else {
+                    $leaders[$league->getId()] = $username;
+                }
+            } else {
+                $leaders[$league->getId()] = null;
+            }
+        }
+        return $leaders;
+    }
+
+    /**
+     * @param League[] $leagues
+     * @param PickRepository $pickRepository
+     *
+     * @return array
+     */
+    private function getLatestPicksMap(array $leagues, PickRepository $pickRepository): array
+    {
+        $picks = [];
+        foreach ($leagues as $league) {
+            $pick = $pickRepository->getLatestCountedPick($league, $this->getUser());
+            if ($pick instanceof Pick) {
+                $picks[$league->getId()]['player'] = $pick->getPlayer()->__toString();
+                $picks[$league->getId()]['points'] = $pick->getPoints();
+            } else {
+                $picks[$league->getId()]['player'] = null;
+            }
+        }
+        return $picks;
+    }
+
+    /**
+     * @param League[] $leagues
+     * @param PickRepository $pickRepository
+     *
+     * @return array
+     */
+    private function getClosestPickMap(array $leagues, PickRepository $pickRepository): array
+    {
+        $picks = [];
+        foreach ($leagues as $league) {
+            $pick = $pickRepository->getNextPick($league, $this->getUser());
+            if ($pick instanceof Pick) {
+                $picks[$league->getId()]['player'] = $pick->getPlayer()->__toString();
+            } else {
+                $picks[$league->getId()]['player'] = null;
+            }
+        }
+        return $picks;
     }
 }
