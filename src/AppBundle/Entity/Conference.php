@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,6 +11,10 @@ use \DateTime;
 
 /**
  * @ORM\Entity()
+ * @UniqueEntity(
+ *     "name",
+ *      message="Conference {{ value }} already exists!"
+ * )
  * @ORM\Table(name = "conference")
  * @ORM\HasLifecycleCallbacks()
  */

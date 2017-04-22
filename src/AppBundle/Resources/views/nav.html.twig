@@ -1,39 +1,30 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <div class="col-md-12">
-    <div class="row top-box">
-        <div class="col-md-4">
-            <h3><a class="text-left" href="{{ path('homepage') }}">NBA PLAY-OFF GAME ON!</a></h3>
-        </div>
-        <div class="col-md-3">
-            <ul class="list-inline list-unstyled top-box-middle-menu">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-            </ul>
-        </div>
+    <div class="row">
         <div class="col-md-5">
+            <h3><a href="{{ path('homepage') }}">NBA PLAY-OFF GAME!</a></h3>
+        </div>
             {% if app.user %}
-                <p class="text-center top-box-right-menu">
-                    <span class="login">Logged in as {{ app.user.username }}</span>
-                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-success">Log out</a>
-                </p>
+                <div class="col-md-3"></div>
+                <div id="logged-in" class="col-md-4">
+                    <span>Logged in as <strong>{{ app.user.username }}</strong></span>
+                    <a href="{{ path('fos_user_security_logout') }}" id="logout-button" class="btn btn-success">Log out</a>
             {% else %}
-                <form class="" action="{{ path("fos_user_security_check") }}" method="post">
-                    {% if csrf_token is defined %}
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-                    {% endif %}
-                    <div class="form-group-top form-inline">
-                        <input type="text" id="username" name="_username" placeholder="Username" required="required" />
-                        <input type="password" id="password" name="_password" placeholder="Password" required="required" />
-                    </div>
-                    <div class="form-group-top">
-                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                        <label for="remember_me" class="text-success remember_me">{{ 'security.login.remember_me'|trans }}</label>
-                        <input type="submit" class="btn btn-success" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-                        <a href="{{ path('fos_user_registration_register') }}" class="btn btn-success">Register</a>
-                    </div>
-                </form>
+                <div class="col-md-7">
+                    <form id="login-form" class="form-inline" action="{{ path("fos_user_security_check") }}" method="post">
+                        {% if csrf_token is defined %}
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="text" id="username" name="_username" placeholder="Username" required="required" />
+                            <input type="password" id="password" name="_password" placeholder="Password" required="required" />
+                            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                            <label for="remember_me" class="text-success remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                            <input type="submit" class="btn btn-success" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+                            <a href="{{ path('fos_user_registration_register') }}" class="btn btn-success">Register</a>
+                        </div>
+                    </form>
             {% endif %}
         </div>
     </div>

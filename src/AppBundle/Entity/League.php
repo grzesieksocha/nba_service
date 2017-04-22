@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +12,10 @@ use \DateTime;
 
 /**
  * @ORM\Entity()
+ * @UniqueEntity(
+ *     "name",
+ *      message="League {{ value }} already exists!"
+ * )
  * @ORM\Table(name="league")
  * @ORM\HasLifecycleCallbacks()
  */
